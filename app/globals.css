@@ -25,3 +25,4 @@ input::placeholder {
 
 /* Respect the notch / status-area inset now that we render no fake status bar */
 .pt-safe { padding-top: max(0.75rem, env(safe-area-inset-top)); }
+.pb-safe { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }

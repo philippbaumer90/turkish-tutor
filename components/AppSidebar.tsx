@@ -1,10 +1,19 @@
 "use client"
 
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useSidebar } from "@/components/SidebarProvider"
 import { PHASE_SHORT_LABELS } from "@/lib/prompt"
 
+const SECTIONS = [
+  { href: "/", label: "Lernen" },
+  { href: "/vocab", label: "Vokabeln" },
+  { href: "/grammar", label: "Grammatik" },
+] as const
+
 export default function AppSidebar() {
   const { streak, phase } = useSidebar()
+  const pathname = usePathname()
 
   return (
     <aside className="hidden desk:flex desk:flex-col w-[316px] shrink-0 h-[100dvh] sticky top-0 bg-[#1a140e] border-r border-border px-7 pt-9 pb-7">
@@ -23,6 +32,28 @@ export default function AppSidebar() {
       <span className="self-start mt-5 text-[14px] font-extrabold text-on-accent bg-accent px-[15px] py-[9px] rounded-pill">
         {streak}-Tage-Streak
       </span>
+
+      {/* Section nav */}
+      <nav className="flex flex-col gap-1 mt-7">
+        {SECTIONS.map(({ href, label }) => {
+          const active = href === "/" ? pathname === "/" : pathname.startsWith(href)
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              className={
+                "px-3 py-2.5 rounded-input text-[15px] " +
+                (active
+                  ? "bg-surface-raised text-text font-extrabold"
+                  : "text-muted font-semibold hover:text-text")
+              }
+            >
+              {label}
+            </Link>
+          )
+        })}
+      </nav>
 
       {/* Lessons */}
       <div

@@ -1,6 +1,7 @@
 import { auth } from "@/auth"
 import { getVocab, getProgress, getSessions, saveVocab, saveProgress, saveSessions } from "@/lib/kv"
 import { INTERVALS, normalize } from "@/lib/srs"
+import { coerceTopic } from "@/lib/topics"
 import { extractSessionData } from "@/lib/claude"
 import { z } from "zod"
 
@@ -65,6 +66,13 @@ export async function POST(req: Request) {
       box: 1,
       notes: v.notes ?? "",
       accept: [],
+      // Reference metadata for the Vocabulary tab (all best-effort from extraction).
+      topic: coerceTopic(v.topic),
+      phase: progress.phase, // the word's "lesson" = the phase active when introduced
+      pos: v.pos,
+      example: v.example,
+      synonyms: v.synonyms,
+      antonyms: v.antonyms,
     }))
   const finalVocab = [...vocab, ...newVocabCards]
 

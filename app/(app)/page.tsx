@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import TabBar from "@/components/TabBar"
 
 type StateData = {
   dueCount: number
@@ -82,8 +83,8 @@ export default function HomePage() {
         </span>
       </div>
 
-      {/* CTA */}
-      <div className="absolute bottom-0 left-0 right-0 px-[22px] pb-9">
+      {/* CTA — lifted above the bottom tab bar on mobile */}
+      <div className="absolute bottom-0 left-0 right-0 px-[22px] pb-[96px] desk:pb-9">
         {hasDue ? (
           <>
             <button
@@ -116,6 +117,8 @@ export default function HomePage() {
           </>
         )}
       </div>
+
+      <TabBar />
     </div>
   )
 }
