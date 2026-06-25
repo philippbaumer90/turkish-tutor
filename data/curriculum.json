@@ -1,0 +1,154 @@
+[
+  {
+    "phase": 0,
+    "title": "Die Mechanik hinter allem (Vokalharmonie)",
+    "grammar": "2-fache Harmonie (e/a): vordere Vokale → e, hintere → a. 4-fache Harmonie (i/ı/u/ü). Konsonant-Erweichung: k→ğ, p→b, ç→c, t→d vor Vokal-Endungen.",
+    "vocab": [],
+    "can_say": [],
+    "notes": "Wird als 'Brille' gelehrt und danach in jeder Phase angewendet. Jede Endung folgt der Vokalharmonie."
+  },
+  {
+    "phase": 1,
+    "title": "Jemand sein, ja/nein sagen, grüßen",
+    "grammar": "Personalpronomen (ben/sen/o/biz/siz/onlar). 'Sein'-Personalendungen: -(y)im, -sin, ∅, -(y)iz, -siniz, -lar/-ler. Fragepartikel mı/mi/mu/mü (nach Vokalharmonie). değil (nicht).",
+    "vocab": [
+      { "tr": "ben", "de": "ich" },
+      { "tr": "sen", "de": "du" },
+      { "tr": "o", "de": "er/sie/es" },
+      { "tr": "biz", "de": "wir" },
+      { "tr": "siz", "de": "ihr/Sie" },
+      { "tr": "onlar", "de": "sie (Pl.)" },
+      { "tr": "evet", "de": "ja" },
+      { "tr": "hayır", "de": "nein" },
+      { "tr": "merhaba", "de": "hallo" },
+      { "tr": "teşekkürler", "de": "danke" },
+      { "tr": "lütfen", "de": "bitte" },
+      { "tr": "iyi", "de": "gut" }
+    ],
+    "can_say": [
+      "Ben iyiyim. (Mir geht's gut.)",
+      "İyi misin? (Geht's dir gut?)",
+      "O öğretmen değil. (Er ist kein Lehrer.)",
+      "Yorgun musun? (Bist du müde?)"
+    ]
+  },
+  {
+    "phase": 2,
+    "title": "Dinge um dich herum (Substantive, Plural, dies/das)",
+    "grammar": "Plural -lar/-ler (nach 2-facher Harmonie). Demonstrativa bu (dies/das), şu (jenes), o (das da). var (es gibt/vorhanden).",
+    "vocab": [
+      { "tr": "ev", "de": "Haus" },
+      { "tr": "su", "de": "Wasser" },
+      { "tr": "kapı", "de": "Tür" },
+      { "tr": "kitap", "de": "Buch" },
+      { "tr": "masa", "de": "Tisch" },
+      { "tr": "kedi", "de": "Katze" },
+      { "tr": "köpek", "de": "Hund" },
+      { "tr": "çay", "de": "Tee" },
+      { "tr": "kahve", "de": "Kaffee" },
+      { "tr": "ekmek", "de": "Brot" },
+      { "tr": "araba", "de": "Auto" },
+      { "tr": "telefon", "de": "Telefon" }
+    ],
+    "can_say": [
+      "Bu bir kitap. (Das ist ein Buch.)",
+      "Şunlar kediler. (Das da sind Katzen.)",
+      "Bu çay. (Das ist Tee.)"
+    ]
+  },
+  {
+    "phase": 3,
+    "title": "Dinge tun (Präsens-Verlaufsform, Kernverben)",
+    "grammar": "Präsens-Verlaufsform -(i)yor + Personalendungen. Verneinung -mı-yor (Vokal schwindet). Verbstamm durch Infinitiv-Abschneiden von -mak/-mek.",
+    "vocab": [
+      { "tr": "olmak", "de": "sein/werden" },
+      { "tr": "yapmak", "de": "machen" },
+      { "tr": "gitmek", "de": "gehen" },
+      { "tr": "gelmek", "de": "kommen" },
+      { "tr": "istemek", "de": "wollen" },
+      { "tr": "yemek", "de": "essen" },
+      { "tr": "içmek", "de": "trinken" },
+      { "tr": "görmek", "de": "sehen" },
+      { "tr": "bilmek", "de": "wissen" },
+      { "tr": "sevmek", "de": "mögen/lieben" },
+      { "tr": "almak", "de": "nehmen/kaufen" },
+      { "tr": "vermek", "de": "geben" },
+      { "tr": "konuşmak", "de": "sprechen" },
+      { "tr": "anlamak", "de": "verstehen" }
+    ],
+    "can_say": [
+      "Çay içiyorum. (Ich trinke Tee.)",
+      "Anlamıyorum. (Ich verstehe nicht.)",
+      "Ne yapıyorsun? (Was machst du?)"
+    ]
+  },
+  {
+    "phase": 4,
+    "title": "Fälle, nach Nützlichkeit geordnet",
+    "grammar": "4a Akkusativ -(y)i (bestimmtes Objekt). 4b Dativ -(y)e (zu/nach/in… hin). 4c Lokativ -de/-da (in/an/auf). 4d Ablativ -den/-dan (von… weg). Je ein Schritt.",
+    "vocab": [
+      { "tr": "okul", "de": "Schule" },
+      { "tr": "iş", "de": "Arbeit" },
+      { "tr": "şehir", "de": "Stadt" },
+      { "tr": "yol", "de": "Weg" },
+      { "tr": "oda", "de": "Zimmer" },
+      { "tr": "market", "de": "Laden/Supermarkt" },
+      { "tr": "restoran", "de": "Restaurant" },
+      { "tr": "hastane", "de": "Krankenhaus" },
+      { "tr": "park", "de": "Park" },
+      { "tr": "deniz", "de": "Meer" }
+    ],
+    "can_say": [
+      "Kitabı okuyorum. (Ich lese das Buch.)",
+      "Eve gidiyorum. (Ich gehe nach Hause.)",
+      "Evdeyim. (Ich bin zu Hause.)",
+      "İstanbul'dan geliyorum. (Ich komme aus Istanbul.)"
+    ]
+  },
+  {
+    "phase": 5,
+    "title": "Haben / nicht haben, Possessiv",
+    "grammar": "Possessivendungen: -im/-ım/-um/-üm (mein), -in/-ın/-un/-ün (dein), etc. var (es gibt/ich habe) + yok (es gibt nicht). Besitz: benim … var.",
+    "vocab": [
+      { "tr": "anne", "de": "Mutter" },
+      { "tr": "baba", "de": "Vater" },
+      { "tr": "kardeş", "de": "Geschwister" },
+      { "tr": "arkadaş", "de": "Freund/in" },
+      { "tr": "isim", "de": "Name" },
+      { "tr": "para", "de": "Geld" },
+      { "tr": "zaman", "de": "Zeit" },
+      { "tr": "soru", "de": "Frage" },
+      { "tr": "cevap", "de": "Antwort" },
+      { "tr": "yardım", "de": "Hilfe" }
+    ],
+    "can_say": [
+      "Benim bir kardeşim var. (Ich habe ein Geschwister.)",
+      "Param yok. (Ich habe kein Geld.)",
+      "Sorum var. (Ich habe eine Frage.)"
+    ]
+  },
+  {
+    "phase": 6,
+    "title": "Vergangenheit, Gewohnheiten, Wünsche",
+    "grammar": "Vergangenheit -di/-dı/-du/-dü (nach Stimmhaftigkeit: -ti/-tı/-tu/-tü). Aorist -(i)r/-er/-ar (Gewohnheit/allgemein). istemek + Infinitiv. lazım (nötig/müssen).",
+    "vocab": [
+      { "tr": "dün", "de": "gestern" },
+      { "tr": "bugün", "de": "heute" },
+      { "tr": "yarın", "de": "morgen" },
+      { "tr": "şimdi", "de": "jetzt" },
+      { "tr": "her gün", "de": "jeden Tag" },
+      { "tr": "çok", "de": "viel/sehr" },
+      { "tr": "az", "de": "wenig" },
+      { "tr": "biraz", "de": "ein bisschen" },
+      { "tr": "belki", "de": "vielleicht" },
+      { "tr": "çünkü", "de": "weil" },
+      { "tr": "ama", "de": "aber" },
+      { "tr": "için", "de": "für" }
+    ],
+    "can_say": [
+      "Dün markete gittim. (Gestern ging ich zum Laden.)",
+      "Su içmek istiyorum. (Ich will Wasser trinken.)",
+      "Gitmem lazım. (Ich muss gehen.)"
+    ]
+  }
+]
