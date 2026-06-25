@@ -20,7 +20,7 @@ export default function SessionSummary({
   onFinish,
 }: Props) {
   return (
-    <div className="relative min-h-[100dvh] bg-bg w-full max-w-md mx-auto flex flex-col pt-safe md:border-x md:border-border">
+    <div className="relative min-h-[100dvh] bg-bg w-full max-w-md desk:max-w-[600px] mx-auto flex flex-col pt-safe md:border-x md:border-border desk:border-x-0 desk:justify-center desk:pb-28">
       <div className="px-[26px] pt-[26px] text-center">
         <h1 className="text-[30px] font-extrabold tracking-tight">Super gemacht!</h1>
         <p className="text-[15px] font-medium text-muted mt-1.5">
@@ -76,7 +76,7 @@ export default function SessionSummary({
       </div>
 
       {/* Fertig button */}
-      <div className="absolute bottom-0 left-0 right-0 w-full max-w-md mx-auto px-[22px] pb-9">
+      <div className="absolute bottom-0 left-0 right-0 px-[22px] pb-9">
         <button
           onClick={onFinish}
           className="w-full h-[60px] rounded-pill bg-accent text-on-accent flex items-center justify-center text-[18px] font-extrabold"
