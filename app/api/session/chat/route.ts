@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import { getProgress } from "@/lib/kv"
+import { getProgress, getSessions } from "@/lib/kv"
 import { streamChat } from "@/lib/claude"
 import { ratelimit } from "@/lib/ratelimit"
 import { z } from "zod"
@@ -8,6 +8,7 @@ const BodySchema = z.object({
   messages: z.array(
     z.object({ role: z.enum(["user", "assistant"]), content: z.string() })
   ),
+  mode: z.enum(["new", "free"]).default("new"),
 })
 
 export async function POST(req: Request) {
@@ -28,10 +29,14 @@ export async function POST(req: Request) {
 
   const today = new Date().toISOString().split("T")[0]
   const progress = await getProgress(sub)
+  // Sessions are stored newest-first (session/end prepends), so .at(0) is the
+  // most recent — the Free-mode anchor. .at(-1) would pin to the stalest one.
+  const lastSession =
+    body.mode === "free" ? ((await getSessions(sub)).at(0) ?? null) : null
 
   let stream: ReadableStream<Uint8Array>
   try {
-    stream = await streamChat(body.messages, progress, today)
+    stream = await streamChat(body.messages, progress, today, { mode: body.mode, lastSession })
   } catch (err) {
     console.error("Claude stream error:", err)
     return Response.json({ error: "Tutor antwortet gerade nicht." }, { status: 502 })

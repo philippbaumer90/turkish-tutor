@@ -1,7 +1,8 @@
 import "server-only"
 import Anthropic from "@anthropic-ai/sdk"
 import { buildSystemMessages } from "./prompt"
-import type { Progress } from "./kv"
+import type { Mode } from "./prompt"
+import type { Progress, SessionLog } from "./kv"
 
 const client = new Anthropic()
 
@@ -10,9 +11,10 @@ export type ChatMessage = { role: "user" | "assistant"; content: string }
 export async function streamChat(
   messages: ChatMessage[],
   progress: Progress,
-  today: string
+  today: string,
+  opts?: { mode?: Mode; lastSession?: SessionLog | null }
 ): Promise<ReadableStream<Uint8Array>> {
-  const system = buildSystemMessages(progress, today)
+  const system = buildSystemMessages(progress, today, opts)
 
   const stream = await client.messages.stream({
     model: "claude-sonnet-4-6",

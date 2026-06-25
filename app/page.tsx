@@ -85,12 +85,20 @@ export default function HomePage() {
       {/* CTA */}
       <div className="absolute bottom-0 left-0 right-0 w-full max-w-md mx-auto px-[22px] pb-9">
         {hasDue ? (
-          <button
-            onClick={() => router.push("/session")}
-            className="w-full h-[60px] rounded-pill bg-accent text-on-accent flex items-center justify-center gap-2.5 text-[18px] font-extrabold"
-          >
-            Los geht&apos;s <span className="text-[20px]">→</span>
-          </button>
+          <>
+            <button
+              onClick={() => router.push("/session")}
+              className="w-full h-[60px] rounded-pill bg-accent text-on-accent flex items-center justify-center gap-2.5 text-[18px] font-extrabold"
+            >
+              Los geht&apos;s <span className="text-[20px]">→</span>
+            </button>
+            <button
+              onClick={() => router.push("/session?mode=free")}
+              className="w-full text-center mt-4 text-[14px] font-semibold text-muted"
+            >
+              Freies Lernen
+            </button>
+          </>
         ) : (
           <>
             <button
@@ -100,7 +108,7 @@ export default function HomePage() {
               Neue Wörter lernen <span className="text-[20px]">→</span>
             </button>
             <button
-              onClick={() => router.push("/session?mode=review")}
+              onClick={() => router.push("/session?mode=free")}
               className="w-full text-center mt-4 text-[14px] font-semibold text-muted"
             >
               Freies Lernen
