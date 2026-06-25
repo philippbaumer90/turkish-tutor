@@ -60,16 +60,24 @@ export default function SessionPage() {
 
   useEffect(() => {
     fetch("/api/session/start", { method: "POST" })
-      .then((r) => r.json())
+      .then((r) => {
+        if (r.status === 401) { router.replace("/login"); return null }
+        if (!r.ok) throw new Error(`${r.status}`)
+        return r.json()
+      })
       .then((data) => {
-        setVocab(data.vocab)
-        setQueue(data.queue)
+        if (!data) return
+        setVocab(data.vocab ?? [])
+        setQueue(data.queue ?? [])
         setPhaseLabel(data.progress?.phase_pointer ?? "")
         setLoading(false)
 
-        if (data.queue.length === 0 || params.get("mode") === "new") {
+        if ((data.queue ?? []).length === 0 || params.get("mode") === "new") {
           goChat(data.progress)
         }
+      })
+      .catch(() => {
+        setLoading(false)
       })
   }, [])
 
@@ -80,6 +88,7 @@ export default function SessionPage() {
   }, [chat, pending])
 
   function curCard(): CardWithDir | null {
+    if (!queue?.length) return null
     const idx = queue[qi]
     return idx != null ? vocab[idx] : null
   }
