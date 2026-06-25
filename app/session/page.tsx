@@ -149,7 +149,7 @@ export default function SessionPage() {
   function goChat(progress?: unknown) {
     const opener: ChatMsg = {
       role: "tutor",
-      text: "Stark gemacht! Jetzt etwas Neues: Lass uns die Fragepartikel **mı/mi/mu/mü** anschauen. Dieser Partikel macht aus einem Aussagesatz eine Ja/Nein-Frage — anders als im Deutschen, wo nur die Wortstellung wechselt. Wie lautet die Frage: „Bist du müde?" auf Türkisch?",
+      text: "Stark gemacht! Jetzt etwas Neues: Lass uns die Fragepartikel **mı/mi/mu/mü** anschauen. Dieser Partikel macht aus einem Aussagesatz eine Ja/Nein-Frage — anders als im Deutschen, wo nur die Wortstellung wechselt. Wie lautet die Frage: 'Bist du müde?' auf Türkisch?",
     }
     setChat([opener])
     setNewTerms(collectTerms([], opener.text))
