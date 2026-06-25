@@ -1,9 +1,13 @@
-import { auth } from "@/auth"
+import NextAuth from "next-auth"
 import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import { authConfig } from "./auth.config"
 
-export default auth((req: NextRequest & { auth: unknown }) => {
-  const isAuthed = !!(req as { auth: unknown }).auth
+// Lightweight, provider-free auth instance for the edge middleware. Only needs
+// AUTH_SECRET to decode the session JWT — no Google provider in this bundle.
+const { auth } = NextAuth(authConfig)
+
+export default auth((req) => {
+  const isAuthed = !!req.auth
   const isApi = req.nextUrl.pathname.startsWith("/api/")
 
   if (!isAuthed) {

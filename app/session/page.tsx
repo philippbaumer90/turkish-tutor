@@ -255,10 +255,11 @@ function SessionView() {
     }))
 
     try {
+      // Fast path — SRS + streak only, no LLM. Show the summary immediately.
       const res = await fetch("/api/session/end", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ results: clientResults, transcript }),
+        body: JSON.stringify({ results: clientResults }),
       })
       const data = await res.json()
       setSummaryData(data)
@@ -275,6 +276,23 @@ function SessionView() {
       setScreen("summary")
     } finally {
       setEnding(false)
+    }
+
+    // Background — Claude extraction (new vocab, pointer, weak spots). Never
+    // blocks the summary; the "Neu im Chat" row fills in when it resolves.
+    if (transcript.length > 0) {
+      fetch("/api/session/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ transcript }),
+      })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          if (d?.newWords) {
+            setSummaryData((prev) => (prev ? { ...prev, newWords: d.newWords } : prev))
+          }
+        })
+        .catch(() => {})
     }
   }
 
