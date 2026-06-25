@@ -7,6 +7,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        desk: "900px",
+      },
       colors: {
         bg: "#16110d",
         surface: "#241c14",

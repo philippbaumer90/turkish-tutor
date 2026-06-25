@@ -88,3 +88,16 @@ export function getChatPhaseLabel(phase: number): string {
   const p = curriculum.find((c) => c.phase === phase)
   return p ? `Phase ${p.phase} — ${p.title}` : `Phase ${phase}`
 }
+
+// Short, friendly sidebar labels for the curriculum phases (index = phase number).
+// These are display strings, not derivable from the curriculum titles. The length
+// must match curriculum.json — enforced by __tests__/prompt.test.ts.
+export const PHASE_SHORT_LABELS = [
+  "Vokalharmonie",
+  "Begrüßen & Vorstellen",
+  "Dinge benennen",
+  "Handlungen",
+  "Die Fälle",
+  "Besitz",
+  "Zeitformen",
+]

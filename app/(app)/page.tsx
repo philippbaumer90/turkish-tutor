@@ -41,7 +41,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="relative min-h-[100dvh] bg-bg flex flex-col w-full max-w-md mx-auto px-0 pt-safe md:border-x md:border-border">
+    <div className="relative min-h-[100dvh] bg-bg flex flex-col w-full max-w-md desk:max-w-[600px] mx-auto px-0 pt-safe md:border-x md:border-border desk:border-x-0 desk:justify-center desk:pb-28">
       {/* Greeting */}
       <div className="px-[26px] pt-6">
         <h1 className="text-[28px] font-extrabold tracking-tight">Merhaba!</h1>
@@ -72,8 +72,8 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Streak row */}
-      <div className="flex items-center gap-3 px-6 mt-[22px]">
+      {/* Streak row (moves into the sidebar on desktop) */}
+      <div className="flex items-center gap-3 px-6 mt-[22px] desk:hidden">
         <span className="text-[14px] font-extrabold text-on-accent bg-accent px-[15px] py-[9px] rounded-pill">
           {state?.streak ?? 0}-Tage-Streak
         </span>
@@ -83,7 +83,7 @@ export default function HomePage() {
       </div>
 
       {/* CTA */}
-      <div className="absolute bottom-0 left-0 right-0 w-full max-w-md mx-auto px-[22px] pb-9">
+      <div className="absolute bottom-0 left-0 right-0 px-[22px] pb-9">
         {hasDue ? (
           <>
             <button
