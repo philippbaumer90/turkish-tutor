@@ -185,7 +185,7 @@ export default function GrammarPage() {
     })
 
   return (
-    <div className="relative min-h-[100dvh] bg-bg flex flex-col w-full max-w-md desk:max-w-[640px] mx-auto px-0 pt-safe md:border-x md:border-border desk:border-x-0 pb-[88px] desk:pb-10">
+    <div className="relative min-h-[100dvh] bg-bg flex flex-col w-full max-w-md desk:max-w-[600px] mx-auto px-0 pt-safe md:border-x md:border-border desk:border-x-0 pb-[88px] desk:pb-10">
       {/* Header */}
       <div className="px-[26px] pt-6 flex items-start justify-between gap-3">
         <div>

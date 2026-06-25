@@ -207,7 +207,7 @@
       { "tr": "Sorum var.", "de": "Ich habe eine Frage." }
     ],
     "pitfall": "var/yok stehen am Ende; das Objekt trägt die Possessivendung.",
-    "keywords": ["var", "yok", "haben", "possessiv"]
+    "keywords": ["var", "yok", "haben"]
   },
   {
     "id": "vergangenheit",

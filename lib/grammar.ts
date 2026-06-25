@@ -18,21 +18,27 @@ export type Classification = "learned" | "upcoming" | "needsReview"
 
 export const GRAMMAR = grammarData as GrammarConcept[]
 
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+}
+
 /**
  * Per-user state derived from phase + weak_spots. Pure.
- *  - needsReview: any keyword (case-insensitive substring) appears in weak_spots
+ *  - needsReview: any keyword matches a weak_spot at a WORD START (case-insensitive)
  *  - else learned: concept.phase <= progress.phase
  *  - else upcoming
- * `progress` is intentionally a structural subset of lib/kv Progress.
+ * Word-start (\b prefix) matching keeps intended hits ("akkusativ" → "Akkusativ-
+ * Endungen") while avoiding interior-substring false positives ("mein" in
+ * "allgemeine", "ort" in "Wort"). `progress` is a structural subset of kv Progress.
  */
 export function classify(
   concept: GrammarConcept,
   progress: { phase: number; weak_spots: string[] }
 ): Classification {
-  const weak = progress.weak_spots.map((w) => w.toLowerCase())
-  const isWeak = concept.keywords.some((k) =>
-    weak.some((w) => w.includes(k.toLowerCase()))
-  )
+  const isWeak = concept.keywords.some((k) => {
+    const re = new RegExp(`\\b${escapeRegExp(k.toLowerCase())}`, "i")
+    return progress.weak_spots.some((w) => re.test(w))
+  })
   if (isWeak) return "needsReview"
   return concept.phase <= progress.phase ? "learned" : "upcoming"
 }
