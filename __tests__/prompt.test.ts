@@ -1,4 +1,5 @@
-import { buildSystemMessages } from "@/lib/prompt"
+import { buildSystemMessages, PHASE_SHORT_LABELS } from "@/lib/prompt"
+import curriculum from "@/data/curriculum.json"
 import type { Progress, SessionLog } from "@/lib/kv"
 
 const progress = (overrides?: Partial<Progress>): Progress => ({
@@ -58,4 +59,12 @@ test("the cached prefix (block 1) is unchanged across modes", () => {
   const free = buildSystemMessages(progress(), "2026-06-25", { mode: "free", lastSession: null })
   expect(free[0]).toEqual(base[0])
   expect(free[0].cache_control).toEqual({ type: "ephemeral" })
+})
+
+// The sidebar maps PHASE_SHORT_LABELS by phase index, so its length is a second
+// source of truth for the phase count. If a phase is added to curriculum.json
+// without a matching label, every row would render as "done" (i < phase) with no
+// current highlight. This locks the two together.
+test("PHASE_SHORT_LABELS stays in lockstep with the curriculum", () => {
+  expect(PHASE_SHORT_LABELS).toHaveLength(curriculum.length)
 })

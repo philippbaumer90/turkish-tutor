@@ -3,12 +3,11 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 
-type SidebarState = { streak: number; phase: number; refresh: () => void }
+type SidebarState = { streak: number; phase: number }
 
 const SidebarContext = createContext<SidebarState>({
   streak: 0,
   phase: 0,
-  refresh: () => {},
 })
 
 export function useSidebar() {
@@ -39,7 +38,7 @@ export default function SidebarProvider({ children }: { children: React.ReactNod
   }, [pathname, refresh])
 
   return (
-    <SidebarContext.Provider value={{ streak, phase, refresh }}>
+    <SidebarContext.Provider value={{ streak, phase }}>
       {children}
     </SidebarContext.Provider>
   )
