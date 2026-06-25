@@ -7,7 +7,7 @@
       "last_reviewed": "2026-06-22",
       "interval_days": 1,
       "box": 1,
-      "notes": "Subjekt „ich"",
+      "notes": "Subjekt ich",
       "accept": []
     },
     {
@@ -57,7 +57,7 @@
       "last_reviewed": "2026-06-22",
       "interval_days": 1,
       "box": 1,
-      "notes": "hinterer Vokal a → -ım (açım); auch: offen",
+      "notes": "hinterer Vokal a -> -im (acim); auch: offen",
       "accept": ["offen"]
     },
     {
@@ -67,7 +67,7 @@
       "last_reviewed": "2026-06-22",
       "interval_days": 1,
       "box": 1,
-      "notes": "mutluyum ✓",
+      "notes": "mutluyum",
       "accept": []
     },
     {
@@ -77,7 +77,7 @@
       "last_reviewed": "2026-06-22",
       "interval_days": 1,
       "box": 1,
-      "notes": "endet auf Vokal → Binde-y (hastayım) ✓",
+      "notes": "endet auf Vokal -> Binde-y (hastayim)",
       "accept": []
     },
     {
@@ -87,29 +87,29 @@
       "last_reviewed": "2026-06-22",
       "interval_days": 1,
       "box": 1,
-      "notes": "ğ stumm",
+      "notes": "g stumm",
       "accept": ["lehrer", "lehrerin", "die lehrerin", "der lehrer"]
     }
   ],
   "progress": {
     "phase": 1,
     "phase_pointer": "Phase 1 (weiter)",
-    "next_up": "Phase 1 (weiter) — zuerst die Fragepartikel mı/mi/mu/mü üben, dann değil (nicht) und die Pluralpronomen (biz/siz/onlar). Danach zu Phase 2 (Substantive, Plural -lar/-ler, dies/das).",
+    "next_up": "Phase 1 (weiter) - Fragepartikel mi/mu/mue, dann degil und Pluralpronomen. Danach Phase 2.",
     "grammar_covered": [
-      "2-fache Vokalharmonie (e/a) — sitzt",
-      "„sein"-Personalendungen: ben -(y)im, sen -sin, o ∅, mit 4-facher Harmonie + Bindekonsonant y",
-      "Fragepartikel mı/mi/mu/mü — eingeführt, noch nicht verinnerlicht"
+      "2-fache Vokalharmonie (e/a)",
+      "sein-Personalendungen: ben -(y)im, sen -sin, o, mit 4-facher Harmonie",
+      "Fragepartikel - eingefuehrt, noch nicht verinnerlicht"
     ],
     "weak_spots": [
-      "Endungen bei hinteren Vokalen — neigt zur vorderen Form -i; hintere Wörter (a/ı/o/u) nehmen -ım",
-      "Fragen — schreibt Aussage + '?' statt mı/mi/mu/mü zu benutzen",
-      "sen vs senin — 'senin' (dein) fürs Subjekt 'du' benutzt"
+      "Endungen bei hinteren Vokalen",
+      "Fragen ohne Fragepartikel",
+      "sen vs senin"
     ],
     "vocab_count": 9,
     "history": [
       { "date": "2026-06-22", "note": "Workspace erstellt, Lehrplan geladen." },
-      { "date": "2026-06-22", "note": "Sitzung 1: Phase 0 geprüft; Phase-1-Endungen gelehrt; 9 Wörter getrackt." },
-      { "date": "2026-06-25", "note": "Tutor auf Deutsch als Betriebssprache umgestellt." }
+      { "date": "2026-06-22", "note": "Sitzung 1: Phase 0, Phase-1-Endungen, 9 Woerter." },
+      { "date": "2026-06-25", "note": "Tutor auf Deutsch umgestellt." }
     ]
   },
   "sessions": []
