@@ -1,5 +1,7 @@
-import type { Progress } from "./kv"
+import type { Progress, SessionLog } from "./kv"
 import curriculum from "@/data/curriculum.json"
+
+export type Mode = "new" | "free"
 
 // The stable system prompt prefix — cached with cache_control: ephemeral
 export const STABLE_SYSTEM = `Du bist ein geduldiger, freundlicher Türkisch-Tutor für einen deutschsprachigen Lernenden auf Niveau A1–A2. Du führst interaktive Übungssitzungen durch.
@@ -24,7 +26,11 @@ PÄDAGOGISCHE REGELN:
 - Schwache Punkte wiederholt ansprechen (Endungen bei hinteren Vokalen, Fragepartikel, sen vs. senin).
 - Fehler immer mit dem Grund korrigieren, nicht nur „falsch".`
 
-export function buildSystemMessages(progress: Progress, today: string): Array<{
+export function buildSystemMessages(
+  progress: Progress,
+  today: string,
+  opts?: { mode?: Mode; lastSession?: SessionLog | null }
+): Array<{
   type: "text"
   text: string
   cache_control?: { type: "ephemeral" }
@@ -44,7 +50,7 @@ export function buildSystemMessages(progress: Progress, today: string): Array<{
     .filter(Boolean)
     .join("\n")
 
-  return [
+  const blocks: Array<{ type: "text"; text: string; cache_control?: { type: "ephemeral" } }> = [
     {
       type: "text",
       text: STABLE_SYSTEM,
@@ -55,6 +61,27 @@ export function buildSystemMessages(progress: Progress, today: string): Array<{
       text: dynamicContext,
     },
   ]
+
+  // Third, uncached block — only when a mode is set. Sits past the cache
+  // breakpoint, so the cached STABLE_SYSTEM prefix still hits.
+  if (opts?.mode === "new") {
+    blocks.push({
+      type: "text",
+      text: `AKTUELLER MODUS — Neue Wörter & Grammatik: Führe den nächsten Lehrplanschritt (${progress.phase_pointer}) ein und mische bewusst Vokabular/Grammatik aus voriger + aktueller Lektion. ~5–8 neue Einheiten, alt+neu mischen.`,
+    })
+  } else if (opts?.mode === "free") {
+    const s = opts.lastSession
+    const known =
+      s?.covered?.join(", ") ||
+      progress.grammar_covered?.join(", ") ||
+      progress.phase_pointer
+    blocks.push({
+      type: "text",
+      text: `AKTUELLER MODUS — Freies Lernen: Kein Pflichtpensum. Knüpf an die letzte Übung an — behandelt: ${known}; offen geblieben: ${s?.missed?.join(", ") || "—"}; geplant war: ${s?.queued_next || progress.next_up}. Lockeres Gespräch/Übung auf Türkisch, Bekanntes festigen, freundlich korrigieren. Neue Wörter nur sparsam. WENN nur sehr wenig Bekanntes vorliegt (Anfänger, kaum Verlauf): kombiniere die wenigen bekannten Wörter zu neuen, einfachen Sätzen statt viel Neues einzuführen.`,
+    })
+  }
+
+  return blocks
 }
 
 export function getChatPhaseLabel(phase: number): string {

@@ -16,6 +16,12 @@ type Screen = "card" | "chat" | "summary"
 const NEW_MATERIAL_SEED =
   "Lass uns mit etwas neuem Stoff weitermachen. Führe das nächste Thema gemäß meinem aktuellen Fortschritt ein — kurz erklärt über den Kontrast Deutsch↔Türkisch — und stelle mir zum Schluss genau eine kurze Produktionsfrage."
 
+// Hidden opener for free mode — a thin kickoff only. The mode policy (anchor on
+// last session, reinforce known, sparse new vocab, degraded recombination) lives
+// in the system prompt, so it isn't duplicated here.
+const FREE_SEED =
+  "Lass uns frei üben. Stell mir eine kurze Frage zum Einstieg, auf Türkisch."
+
 type CardResult = {
   correct: boolean
   your: string
@@ -60,6 +66,7 @@ export default function SessionPage() {
 function SessionView() {
   const router = useRouter()
   const params = useSearchParams()
+  const mode = params.get("mode") === "free" ? "free" : "new"
 
   const [screen, setScreen] = useState<Screen>("card")
   const [vocab, setVocab] = useState<CardWithDir[]>([])
@@ -98,7 +105,8 @@ function SessionView() {
         setStreak(data.streak ?? 0)
         setLoading(false)
 
-        if ((data.queue ?? []).length === 0 || params.get("mode") === "new") {
+        // free mode never drills cards; new mode runs the warm-up when due.
+        if ((data.queue ?? []).length === 0 || mode === "free") {
           goChat()
         }
       })
@@ -182,7 +190,7 @@ function SessionView() {
   }
 
   function goChat() {
-    const seed: ChatMsg = { role: "me", text: NEW_MATERIAL_SEED, hidden: true }
+    const seed: ChatMsg = { role: "me", text: mode === "free" ? FREE_SEED : NEW_MATERIAL_SEED, hidden: true }
     setChat([seed])
     setScreen("chat")
     streamTutor([seed])
@@ -200,7 +208,7 @@ function SessionView() {
       const res = await fetch("/api/session/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: JSON.stringify({ messages: apiMessages, mode }),
       })
 
       if (!res.ok || !res.body) throw new Error("No stream")
@@ -539,11 +547,13 @@ function SessionView() {
           ‹
         </button>
         <div className="flex-1">
-          <div className="text-[11px] font-extrabold uppercase text-muted"
+          <div className={`text-[11px] font-extrabold uppercase ${mode === "free" ? "text-accent-bright" : "text-muted"}`}
             style={{ letterSpacing: "0.1em", fontFamily: "'Hanken Grotesk', sans-serif" }}>
-            Neuer Stoff
+            {mode === "free" ? "Freies Lernen" : "Neuer Stoff"}
           </div>
-          <div className="text-[16px] font-extrabold mt-0.5">{phaseLabel || "Phase 1"}</div>
+          <div className="text-[16px] font-extrabold mt-0.5">
+            {mode === "free" ? "Aus dem, was du kennst" : phaseLabel || "Phase 1"}
+          </div>
         </div>
         <button
           onClick={endSession}
