@@ -317,7 +317,7 @@ function SessionView() {
     const c = curCard()
     return (
       <div
-        className="relative min-h-[100dvh] bg-bg w-full max-w-md mx-auto overflow-hidden pt-safe"
+        className="relative min-h-[100dvh] bg-bg w-full max-w-md mx-auto overflow-hidden pt-safe md:border-x md:border-border"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
@@ -511,7 +511,7 @@ function SessionView() {
 
   // ---- CHAT SCREEN ----
   return (
-    <div className="bg-bg w-full max-w-md mx-auto flex flex-col pt-safe" style={{ height: "100dvh" }}>
+    <div className="bg-bg w-full max-w-md mx-auto flex flex-col pt-safe md:border-x md:border-border" style={{ height: "100dvh" }}>
       {/* Chat header */}
       <div className="px-4 pt-3 pb-[14px] flex items-center gap-2.5 shrink-0">
         <button

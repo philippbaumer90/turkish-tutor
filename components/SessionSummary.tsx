@@ -20,7 +20,7 @@ export default function SessionSummary({
   onFinish,
 }: Props) {
   return (
-    <div className="relative min-h-[100dvh] bg-bg w-full max-w-md mx-auto flex flex-col pt-safe">
+    <div className="relative min-h-[100dvh] bg-bg w-full max-w-md mx-auto flex flex-col pt-safe md:border-x md:border-border">
       <div className="px-[26px] pt-[26px] text-center">
         <h1 className="text-[30px] font-extrabold tracking-tight">Super gemacht!</h1>
         <p className="text-[15px] font-medium text-muted mt-1.5">

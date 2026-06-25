@@ -41,7 +41,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="relative min-h-[100dvh] bg-bg flex flex-col w-full max-w-md mx-auto px-0 pt-safe">
+    <div className="relative min-h-[100dvh] bg-bg flex flex-col w-full max-w-md mx-auto px-0 pt-safe md:border-x md:border-border">
       {/* Greeting */}
       <div className="px-[26px] pt-6">
         <h1 className="text-[28px] font-extrabold tracking-tight">Merhaba!</h1>
