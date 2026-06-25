@@ -7,7 +7,7 @@ import ChatBubble from "@/components/ChatBubble"
 import SessionSummary from "@/components/SessionSummary"
 import { gradeAnswer, INTERVALS } from "@/lib/srs"
 import type { CardWithDir, ReviewResult } from "@/lib/srs"
-import { collectTerms } from "@/lib/claude"
+import { collectTerms } from "@/lib/tutor-utils"
 
 type CardPhase = "prompt" | "feedback" | "reveal"
 type Screen = "card" | "chat" | "summary"

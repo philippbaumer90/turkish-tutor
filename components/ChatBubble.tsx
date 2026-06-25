@@ -1,4 +1,4 @@
-import { splitTutor } from "@/lib/claude"
+import { splitTutor } from "@/lib/tutor-utils"
 
 type Props = {
   role: "tutor" | "me"
