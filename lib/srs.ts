@@ -9,6 +9,15 @@ export type VocabCard = {
   box: number
   notes?: string
   accept?: string[]
+  // Optional reference metadata for the Vocabulary tab. All optional so existing
+  // Redis data stays valid and SRS logic below is untouched. Populated at capture
+  // (api/session/extract) and by the one-time scripts/backfill-vocab.ts.
+  topic?: string // one of lib/topics TOPICS
+  phase?: number // curriculum phase ("lesson") the word belongs to
+  pos?: string // part of speech, e.g. "Substantiv", "Verb"
+  example?: { tr: string; de: string } // one in-context sentence, leaning on known words
+  synonyms?: string[]
+  antonyms?: string[]
 }
 
 export type CardWithDir = VocabCard & { dir: "de2tr" | "tr2de" }

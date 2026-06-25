@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk"
 import { buildSystemMessages } from "./prompt"
 import type { Mode } from "./prompt"
 import type { Progress, SessionLog } from "./kv"
+import { TOPICS } from "./topics"
 
 const client = new Anthropic()
 
@@ -43,7 +44,16 @@ export async function streamChat(
 }
 
 export type SessionExtract = {
-  new_vocab: { tr: string; de: string; notes?: string }[]
+  new_vocab: {
+    tr: string
+    de: string
+    notes?: string
+    topic?: string
+    pos?: string
+    example?: { tr: string; de: string }
+    synonyms?: string[]
+    antonyms?: string[]
+  }[]
   pointer_update: { phase: number; phase_pointer: string; next_up: string }
   weak_spots: string[]
   grammar_covered: string[]
@@ -82,6 +92,33 @@ export async function extractSessionData(
                   tr: { type: "string", description: "Türkisches Wort" },
                   de: { type: "string", description: "Deutsche Bedeutung" },
                   notes: { type: "string", description: "Kurze Grammatiknotiz" },
+                  topic: {
+                    type: "string",
+                    enum: TOPICS as unknown as string[],
+                    description: "Semantisches Feld — WÄHLE GENAU EINES aus der Liste; wenn nichts passt, 'Sonstiges'.",
+                  },
+                  pos: {
+                    type: "string",
+                    description: "Wortart, z.B. 'Substantiv', 'Verb', 'Adjektiv'.",
+                  },
+                  example: {
+                    type: "object",
+                    description: "Ein kurzer Beispielsatz, der möglichst nur bekannte Wörter verwendet.",
+                    properties: {
+                      tr: { type: "string", description: "Türkischer Beispielsatz" },
+                      de: { type: "string", description: "Deutsche Übersetzung" },
+                    },
+                  },
+                  synonyms: {
+                    type: "array",
+                    items: { type: "string" },
+                    description: "Türkische Synonyme (nur wenn sinnvoll).",
+                  },
+                  antonyms: {
+                    type: "array",
+                    items: { type: "string" },
+                    description: "Türkische Gegenwörter (nur wenn sinnvoll).",
+                  },
                 },
                 required: ["tr", "de"],
               },

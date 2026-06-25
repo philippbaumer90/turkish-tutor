@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
+import TabBar from "@/components/TabBar"
 
 type StateData = {
   dueCount: number
@@ -82,8 +84,23 @@ export default function HomePage() {
         </span>
       </div>
 
-      {/* CTA */}
-      <div className="absolute bottom-0 left-0 right-0 px-[22px] pb-9">
+      {/* Pointer to the new reference tabs (mobile only — desktop has the sidebar) */}
+      <Link
+        href="/vocab"
+        className="desk:hidden mx-[22px] mt-5 flex items-center gap-3 bg-surface border border-border rounded-input px-4 py-3"
+      >
+        <span className="text-[11px] font-extrabold uppercase text-accent shrink-0"
+          style={{ letterSpacing: "0.12em", fontFamily: "'Hanken Grotesk', sans-serif" }}>
+          Neu
+        </span>
+        <span className="text-[13.5px] font-semibold text-muted leading-snug">
+          <span className="text-text font-bold">Vokabeln &amp; Grammatik</span> zum Nachschlagen
+        </span>
+        <span className="ml-auto text-[18px] text-faint">›</span>
+      </Link>
+
+      {/* CTA — lifted above the bottom tab bar on mobile */}
+      <div className="absolute bottom-0 left-0 right-0 px-[22px] pb-[96px] desk:pb-9">
         {hasDue ? (
           <>
             <button
@@ -116,6 +133,8 @@ export default function HomePage() {
           </>
         )}
       </div>
+
+      <TabBar />
     </div>
   )
 }

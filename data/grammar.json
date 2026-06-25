@@ -1,0 +1,254 @@
+[
+  {
+    "id": "vokalharmonie",
+    "name": "Vokalharmonie",
+    "phase": 0,
+    "form": "Vordere Vokale (e i ö ü) → e/i · hintere (a ı o u) → a/ı. 2-fach (e/a) und 4-fach (i/ı/u/ü).",
+    "meaning": "Jede Endung richtet sich nach dem letzten Vokal des Wortes — die „Brille“ für alles Weitere.",
+    "use": "Gilt für ALLE Endungen: Plural, Fälle, Personalendungen, Zeiten.",
+    "examples": [
+      { "tr": "ev → evler", "de": "Haus → Häuser (vorne → e)" },
+      { "tr": "kitap → kitaplar", "de": "Buch → Bücher (hinten → a)" }
+    ],
+    "pitfall": "Auf den LETZTEN Vokal schauen, nicht den ersten.",
+    "keywords": ["vokalharmonie", "harmonie", "hinteren vokal", "endungen bei hinteren"]
+  },
+  {
+    "id": "konsonant",
+    "name": "Konsonant-Erweichung",
+    "phase": 0,
+    "form": "k→ğ, p→b, ç→c, t→d vor einer Vokal-Endung.",
+    "meaning": "Harte Konsonanten werden vor Vokalen weich.",
+    "use": "kitap + ı → kitabı · ekmek + i → ekmeği.",
+    "examples": [
+      { "tr": "kitap → kitabı", "de": "das Buch (Akk.)" },
+      { "tr": "ekmek → ekmeği", "de": "das Brot (Akk.)" }
+    ],
+    "pitfall": "Nur vor Vokal-Endungen — nicht vor Konsonanten.",
+    "keywords": ["konsonant", "erweichung", "yumuşama"]
+  },
+  {
+    "id": "pronomen",
+    "name": "Personalpronomen",
+    "phase": 1,
+    "form": "ben · sen · o · biz · siz · onlar.",
+    "meaning": "ich, du, er/sie/es, wir, ihr/Sie, sie (Pl.).",
+    "use": "Subjekt; oft weggelassen, weil die Endung die Person schon zeigt.",
+    "examples": [
+      { "tr": "Ben iyiyim.", "de": "Mir geht's gut." },
+      { "tr": "Sen öğretmensin.", "de": "Du bist Lehrer(in)." }
+    ],
+    "pitfall": "sen (du) ist NICHT senin (dein).",
+    "keywords": ["pronomen", "personalpronomen", "sen vs senin", "senin"]
+  },
+  {
+    "id": "sein-endungen",
+    "name": "„Sein“-Personalendungen",
+    "phase": 1,
+    "form": "-(y)im, -sin, ∅, -(y)iz, -siniz, -ler/-lar.",
+    "meaning": "„sein“ wird als Endung ans Wort gehängt — es gibt kein eigenes Wort dafür.",
+    "use": "Ben yorgunum = Ich (bin) müde.",
+    "examples": [
+      { "tr": "Yorgunum.", "de": "Ich bin müde." },
+      { "tr": "O öğretmen.", "de": "Er/Sie ist Lehrer(in)." }
+    ],
+    "pitfall": "Nach Vokal kommt ein Binde-y: iyi → iyiyim.",
+    "keywords": ["sein-endung", "kopula", "-im", "-sin"]
+  },
+  {
+    "id": "fragepartikel",
+    "name": "Fragepartikel mı/mi/mu/mü",
+    "phase": 1,
+    "form": "mı · mi · mu · mü (nach Vokalharmonie), getrennt geschrieben.",
+    "meaning": "Macht aus einer Aussage eine Ja/Nein-Frage.",
+    "use": "İyi misin? = Geht es dir gut?",
+    "examples": [
+      { "tr": "Yorgun musun?", "de": "Bist du müde?" },
+      { "tr": "O öğretmen mi?", "de": "Ist er/sie Lehrer(in)?" }
+    ],
+    "pitfall": "Ohne Partikel bleibt es eine Aussage — Betonung allein reicht nicht.",
+    "keywords": ["frage", "fragepartikel", "fragen ohne", "soru"]
+  },
+  {
+    "id": "degil",
+    "name": "değil (nicht/kein)",
+    "phase": 1,
+    "form": "değil steht hinter dem Wort und trägt die Personalendung.",
+    "meaning": "Verneint Sätze ohne Verb.",
+    "use": "O öğretmen değil. = Er ist kein Lehrer.",
+    "examples": [
+      { "tr": "Ben hasta değilim.", "de": "Ich bin nicht krank." },
+      { "tr": "Bu çay değil.", "de": "Das ist kein Tee." }
+    ],
+    "pitfall": "Die Endung hängt an değil, nicht am Adjektiv: hasta değilim.",
+    "keywords": ["değil", "verneinung", "negation"]
+  },
+  {
+    "id": "plural",
+    "name": "Plural -ler/-lar",
+    "phase": 2,
+    "form": "-ler (vordere Vokale) / -lar (hintere).",
+    "meaning": "Mehrzahl.",
+    "use": "ev → evler · kitap → kitaplar.",
+    "examples": [
+      { "tr": "evler", "de": "Häuser" },
+      { "tr": "kediler", "de": "Katzen" }
+    ],
+    "pitfall": "Nach einer Zahl KEIN Plural: iki kitap (nicht kitaplar).",
+    "keywords": ["plural", "mehrzahl"]
+  },
+  {
+    "id": "demonstrativ",
+    "name": "bu / şu / o",
+    "phase": 2,
+    "form": "bu (dies) · şu (jenes) · o (das da).",
+    "meaning": "Zeigt auf Dinge — nah, mittel, fern.",
+    "use": "Bu bir kitap. = Das ist ein Buch.",
+    "examples": [
+      { "tr": "Bu su.", "de": "Das ist Wasser." },
+      { "tr": "Şu ev.", "de": "Jenes Haus." }
+    ],
+    "pitfall": "o heißt sowohl „er/sie/es“ als auch „das da“.",
+    "keywords": ["demonstrativ", "zeigen"]
+  },
+  {
+    "id": "praesens",
+    "name": "Präsens -(i)yor",
+    "phase": 3,
+    "form": "Verbstamm + -(i)yor + Personalendung.",
+    "meaning": "Laufende Handlung — gerade jetzt.",
+    "use": "Çay içiyorum. = Ich trinke (gerade) Tee.",
+    "examples": [
+      { "tr": "Ne yapıyorsun?", "de": "Was machst du?" },
+      { "tr": "Eve gidiyorum.", "de": "Ich gehe nach Hause." }
+    ],
+    "pitfall": "Verneinung -mı-yor: anlamıyorum — der Vokal schwindet.",
+    "keywords": ["präsens", "yor", "verlaufsform"]
+  },
+  {
+    "id": "akkusativ",
+    "name": "Akkusativ -(y)i",
+    "phase": 4,
+    "form": "-(y)i / -ı / -u / -ü.",
+    "meaning": "Markiert ein BESTIMMTES Objekt.",
+    "use": "Kitabı okuyorum. = Ich lese das Buch.",
+    "examples": [
+      { "tr": "Kitabı okuyorum.", "de": "Ich lese das (bestimmte) Buch." },
+      { "tr": "Bir kitap okuyorum.", "de": "Ich lese ein Buch (endungslos)." }
+    ],
+    "pitfall": "Nur bei bestimmtem Objekt — „ein Buch“ bleibt endungslos.",
+    "keywords": ["akkusativ", "objekt"]
+  },
+  {
+    "id": "dativ",
+    "name": "Dativ -(y)e",
+    "phase": 4,
+    "form": "-e / -a (nach Vokal Binde-y: -ye/-ya).",
+    "meaning": "Richtung/Ziel: zu, nach, in … hin; auch das indirekte Objekt (wem?).",
+    "use": "Eve gidiyorum. = Ich gehe nach Hause.",
+    "examples": [
+      { "tr": "Eve gidiyorum.", "de": "Ich gehe nach Hause." },
+      { "tr": "Okula gidiyorum.", "de": "Ich gehe zur Schule." }
+    ],
+    "pitfall": "Nach Vokal kommt ein Binde-y: araba → arabaya.",
+    "keywords": ["dativ", "richtung", "yönelme"]
+  },
+  {
+    "id": "lokativ",
+    "name": "Lokativ -de/-da",
+    "phase": 4,
+    "form": "-de / -da (→ -te / -ta nach hartem Konsonant).",
+    "meaning": "Ort: in / an / auf.",
+    "use": "Evdeyim. = Ich bin zu Hause.",
+    "examples": [
+      { "tr": "Okuldayım.", "de": "Ich bin in der Schule." },
+      { "tr": "Markette.", "de": "Im Laden." }
+    ],
+    "pitfall": "Nach k/t/p → -te/-ta: markette, nicht markede.",
+    "keywords": ["lokativ", "ort"]
+  },
+  {
+    "id": "ablativ",
+    "name": "Ablativ -den/-dan",
+    "phase": 4,
+    "form": "-den / -dan (→ -ten / -tan nach hartem Konsonant).",
+    "meaning": "Herkunft/Ausgangspunkt: von … weg, aus.",
+    "use": "İstanbul'dan geliyorum. = Ich komme aus Istanbul.",
+    "examples": [
+      { "tr": "Evden geliyorum.", "de": "Ich komme von zu Hause." },
+      { "tr": "Marketten geliyorum.", "de": "Ich komme aus dem Laden." }
+    ],
+    "pitfall": "Nach k/t/p/ç/s/ş/f/h → -ten/-tan: marketten.",
+    "keywords": ["ablativ", "herkunft", "woher"]
+  },
+  {
+    "id": "possessiv",
+    "name": "Possessivendungen",
+    "phase": 5,
+    "form": "-(i)m mein · -(i)n dein · -(s)i sein · -(i)miz unser · -(i)niz euer · -leri ihr.",
+    "meaning": "Besitz wird als Endung ans Substantiv gehängt — „mein Buch“ ist ein Wort.",
+    "use": "kitabım = mein Buch · annem = meine Mutter.",
+    "examples": [
+      { "tr": "Annem evde.", "de": "Meine Mutter ist zu Hause." },
+      { "tr": "Adın ne?", "de": "Wie ist dein Name?" }
+    ],
+    "pitfall": "Nach Vokal nur -m/-n: araba → arabam (mein Auto).",
+    "keywords": ["possessiv", "besitz", "mein"]
+  },
+  {
+    "id": "haben",
+    "name": "var / yok (haben)",
+    "phase": 5,
+    "form": "benim … -(i)m var / yok.",
+    "meaning": "Besitz: ich habe / habe nicht.",
+    "use": "Benim bir kardeşim var. = Ich habe ein Geschwister.",
+    "examples": [
+      { "tr": "Param yok.", "de": "Ich habe kein Geld." },
+      { "tr": "Sorum var.", "de": "Ich habe eine Frage." }
+    ],
+    "pitfall": "var/yok stehen am Ende; das Objekt trägt die Possessivendung.",
+    "keywords": ["var", "yok", "haben", "possessiv"]
+  },
+  {
+    "id": "vergangenheit",
+    "name": "Vergangenheit -di",
+    "phase": 6,
+    "form": "-di/-dı/-du/-dü (→ -ti/-tı… nach hartem Konsonant).",
+    "meaning": "Abgeschlossene Vergangenheit.",
+    "use": "Dün markete gittim. = Gestern ging ich zum Laden.",
+    "examples": [
+      { "tr": "Geldim.", "de": "Ich bin gekommen." },
+      { "tr": "Çay içtim.", "de": "Ich habe Tee getrunken." }
+    ],
+    "pitfall": "Nach k/t/p/s/ş/ç/h/f → -ti: gittim, içtim.",
+    "keywords": ["vergangenheit", "past", "-di"]
+  },
+  {
+    "id": "aorist",
+    "name": "Aorist -(i)r",
+    "phase": 6,
+    "form": "Verbstamm + -r / -ir / -er / -ar (nach Vokalharmonie).",
+    "meaning": "Allgemeines, Gewohnheiten, Bereitschaft — kein konkretes „gerade jetzt“.",
+    "use": "Çay içerim. = Ich trinke (gewöhnlich) Tee.",
+    "examples": [
+      { "tr": "Her gün çay içerim.", "de": "Jeden Tag trinke ich Tee." },
+      { "tr": "Yardım ederim.", "de": "Ich helfe gern." }
+    ],
+    "pitfall": "Nicht mit -(i)yor verwechseln: içiyorum = gerade jetzt, içerim = generell.",
+    "keywords": ["aorist", "gewohnheit", "geniş zaman"]
+  },
+  {
+    "id": "istemek-lazim",
+    "name": "Wünsche & Müssen (istemek / lazım)",
+    "phase": 6,
+    "form": "Infinitiv + istemek (wollen) · Verbstamm + Possessiv + lazım (müssen).",
+    "meaning": "Wünsche ausdrücken und Notwendigkeit.",
+    "use": "Su içmek istiyorum. = Ich will Wasser trinken.",
+    "examples": [
+      { "tr": "Su içmek istiyorum.", "de": "Ich will Wasser trinken." },
+      { "tr": "Gitmem lazım.", "de": "Ich muss gehen." }
+    ],
+    "pitfall": "Bei lazım trägt das Verb die Possessivendung: gitmem lazım (ich), gitmen lazım (du).",
+    "keywords": ["istemek", "wollen", "lazım", "müssen", "wunsch"]
+  }
+]
