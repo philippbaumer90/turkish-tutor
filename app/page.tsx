@@ -26,7 +26,7 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg flex items-center justify-center">
+      <div className="min-h-[100dvh] bg-bg flex items-center justify-center">
         <div className="flex gap-1.5">
           {[0, 1, 2].map((i) => (
             <span
@@ -41,18 +41,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg flex flex-col max-w-sm mx-auto px-0">
-      {/* Status bar */}
-      <div className="h-[52px] flex items-center justify-between px-7 pt-2">
-        <span className="text-[15px] font-bold">9:41</span>
-        <div className="flex items-center gap-1.5 text-[13px] font-bold opacity-85">
-          <span>5G</span>
-          <div className="w-6 h-3 border-[1.5px] border-text rounded-[3px] relative">
-            <div className="absolute top-[1.5px] left-[1.5px] bottom-[1.5px] w-[60%] bg-text rounded-[1px]" />
-          </div>
-        </div>
-      </div>
-
+    <div className="relative min-h-[100dvh] bg-bg flex flex-col w-full max-w-md mx-auto px-0 pt-safe">
       {/* Greeting */}
       <div className="px-[26px] pt-6">
         <h1 className="text-[28px] font-extrabold tracking-tight">Merhaba!</h1>
@@ -94,7 +83,7 @@ export default function HomePage() {
       </div>
 
       {/* CTA */}
-      <div className="absolute bottom-0 left-0 right-0 max-w-sm mx-auto px-[22px] pb-9">
+      <div className="absolute bottom-0 left-0 right-0 w-full max-w-md mx-auto px-[22px] pb-9">
         {hasDue ? (
           <button
             onClick={() => router.push("/session")}
@@ -114,7 +103,7 @@ export default function HomePage() {
               onClick={() => router.push("/session?mode=review")}
               className="w-full text-center mt-4 text-[14px] font-semibold text-muted"
             >
-              Trotzdem frei wiederholen
+              Freies Lernen
             </button>
           </>
         )}

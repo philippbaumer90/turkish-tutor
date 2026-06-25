@@ -43,6 +43,8 @@ export async function streamChat(
 export type SessionExtract = {
   new_vocab: { tr: string; de: string; notes?: string }[]
   pointer_update: { phase: number; phase_pointer: string; next_up: string }
+  weak_spots: string[]
+  grammar_covered: string[]
   session_log: {
     covered: string[]
     missed: string[]
@@ -92,6 +94,16 @@ export async function extractSessionData(
               },
               required: ["phase", "phase_pointer", "next_up"],
             },
+            weak_spots: {
+              type: "array",
+              items: { type: "string" },
+              description: "VOLLSTÄNDIGE aktualisierte Liste der Schwachpunkte des Lernenden. Nimm die bisherigen Schwachpunkte aus dem Kontext, entferne, was er in dieser Sitzung sicher beherrscht hat, und füge neue hinzu, bei denen er Fehler gemacht hat.",
+            },
+            grammar_covered: {
+              type: "array",
+              items: { type: "string" },
+              description: "VOLLSTÄNDIGE aktualisierte Liste der behandelten Grammatikthemen. Bisherige Themen aus dem Kontext plus alles, was in dieser Sitzung neu eingeführt wurde.",
+            },
             session_log: {
               type: "object",
               description: "Sitzungsprotokoll.",
@@ -104,7 +116,7 @@ export async function extractSessionData(
               required: ["covered", "missed", "queued_next"],
             },
           },
-          required: ["new_vocab", "pointer_update", "session_log"],
+          required: ["new_vocab", "pointer_update", "weak_spots", "grammar_covered", "session_log"],
         },
       },
     ],
@@ -127,6 +139,8 @@ export async function extractSessionData(
         phase_pointer: progress.phase_pointer,
         next_up: progress.next_up,
       },
+      weak_spots: progress.weak_spots,
+      grammar_covered: progress.grammar_covered,
       session_log: { covered: [], missed: [], queued_next: "" },
     }
   }

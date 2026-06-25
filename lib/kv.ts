@@ -66,20 +66,17 @@ export async function saveSessions(sub: string, sessions: SessionLog[]): Promise
 
 export function calcStreak(sessions: SessionLog[], today: string): number {
   if (sessions.length === 0) return 0
-  const sorted = [...sessions].sort((a, b) => b.date.localeCompare(a.date))
-  let streak = 0
-  let expected = new Date(today)
-  expected.setDate(expected.getDate() - 1) // start checking from yesterday
+  const days = new Set(sessions.map((s) => s.date))
 
-  for (const s of sorted) {
-    const d = new Date(s.date)
-    const exp = expected.toISOString().split("T")[0]
-    if (s.date === exp) {
-      streak++
-      expected.setDate(expected.getDate() - 1)
-    } else if (s.date < exp) {
-      break
-    }
+  // Count consecutive days ending today. If today has no session yet, start
+  // from yesterday so an unfinished today doesn't read as a broken streak.
+  const cur = new Date(today + "T00:00:00")
+  if (!days.has(today)) cur.setDate(cur.getDate() - 1)
+
+  let streak = 0
+  while (days.has(cur.toISOString().split("T")[0])) {
+    streak++
+    cur.setDate(cur.getDate() - 1)
   }
   return streak
 }

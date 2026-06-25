@@ -20,12 +20,7 @@ export default function SessionSummary({
   onFinish,
 }: Props) {
   return (
-    <div className="min-h-screen bg-bg max-w-sm mx-auto flex flex-col">
-      {/* Status bar */}
-      <div className="h-[52px] flex items-center justify-between px-7 pt-2">
-        <span className="text-[15px] font-bold">9:41</span>
-      </div>
-
+    <div className="relative min-h-[100dvh] bg-bg w-full max-w-md mx-auto flex flex-col pt-safe">
       <div className="px-[26px] pt-[26px] text-center">
         <h1 className="text-[30px] font-extrabold tracking-tight">Super gemacht!</h1>
         <p className="text-[15px] font-medium text-muted mt-1.5">
@@ -81,7 +76,7 @@ export default function SessionSummary({
       </div>
 
       {/* Fertig button */}
-      <div className="absolute bottom-0 left-0 right-0 max-w-sm mx-auto px-[22px] pb-9">
+      <div className="absolute bottom-0 left-0 right-0 w-full max-w-md mx-auto px-[22px] pb-9">
         <button
           onClick={onFinish}
           className="w-full h-[60px] rounded-pill bg-accent text-on-accent flex items-center justify-center text-[18px] font-extrabold"

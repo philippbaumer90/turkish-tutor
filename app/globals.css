@@ -22,3 +22,6 @@ input {
 input::placeholder {
   color: #6f6253;
 }
+
+/* Respect the notch / status-area inset now that we render no fake status bar */
+.pt-safe { padding-top: max(0.75rem, env(safe-area-inset-top)); }

@@ -1,7 +1,7 @@
 import { auth } from "@/auth"
-import { getVocab, getProgress, getSessions, saveVocab, saveProgress, saveSessions } from "@/lib/kv"
-import { leitnerUpdate, INTERVALS } from "@/lib/srs"
-import { extractSessionData } from "@/lib/claude"
+import { getVocab, getProgress, getSessions, saveVocab, saveProgress, saveSessions, calcStreak } from "@/lib/kv"
+import { leitnerUpdate, INTERVALS, normalize } from "@/lib/srs"
+import { extractSessionData, type SessionExtract } from "@/lib/claude"
 import { z } from "zod"
 
 const BodySchema = z.object({
@@ -14,7 +14,6 @@ const BodySchema = z.object({
     role: z.enum(["user", "assistant"]),
     content: z.string(),
   })),
-  newTerms: z.array(z.string()),
 })
 
 export async function POST(req: Request) {
@@ -51,18 +50,19 @@ export async function POST(req: Request) {
   }
 
   // Extract session data via Claude (new vocab, curriculum pointer, log)
-  let extracted = {
-    new_vocab: [] as { tr: string; de: string; notes?: string }[],
+  let extracted: SessionExtract = {
+    new_vocab: [],
     pointer_update: {
       phase: progress.phase,
       phase_pointer: progress.phase_pointer,
       next_up: progress.next_up,
     },
+    weak_spots: progress.weak_spots,
+    grammar_covered: progress.grammar_covered,
     session_log: {
-      covered: [] as string[],
-      missed: [] as string[],
+      covered: [],
+      missed: [],
       queued_next: "",
-      notes: undefined as string | undefined,
     },
   }
 
@@ -74,26 +74,34 @@ export async function POST(req: Request) {
     }
   }
 
-  // Append new vocab from chat to vocabList (box 1)
-  const newVocabCards = extracted.new_vocab.map((v) => ({
-    tr: v.tr,
-    de: v.de,
-    added: today,
-    last_reviewed: today,
-    interval_days: INTERVALS[0],
-    box: 1,
-    notes: v.notes ?? "",
-    accept: [],
-  }))
+  // Append new vocab from chat (box 1), skipping words already in the deck
+  const existingTr = new Set(updatedVocab.map((c) => normalize(c.tr)))
+  const newVocabCards = extracted.new_vocab
+    .filter((v) => {
+      const key = normalize(v.tr)
+      if (!key || existingTr.has(key)) return false
+      existingTr.add(key) // also guards against dupes within this batch
+      return true
+    })
+    .map((v) => ({
+      tr: v.tr,
+      de: v.de,
+      added: today,
+      last_reviewed: today,
+      interval_days: INTERVALS[0],
+      box: 1,
+      notes: v.notes ?? "",
+      accept: [],
+    }))
   const finalVocab = [...updatedVocab, ...newVocabCards]
 
-  // Update progress
+  // Update progress — weak_spots and grammar_covered now adapt via Claude
   const updatedProgress = {
     ...progress,
     ...extracted.pointer_update,
     vocab_count: finalVocab.length,
-    grammar_covered: progress.grammar_covered,
-    weak_spots: progress.weak_spots,
+    grammar_covered: extracted.grammar_covered,
+    weak_spots: extracted.weak_spots,
     history: [
       ...progress.history,
       { date: today, note: extracted.session_log.covered.join("; ") || "Sitzung abgeschlossen." },
@@ -108,7 +116,8 @@ export async function POST(req: Request) {
     queued_next: extracted.session_log.queued_next,
     notes: extracted.session_log.notes,
   }
-  const updatedSessions = [newSession, ...sessions].slice(0, 30)
+  // Newest first, cap 30, and collapse a second session on the same day
+  const updatedSessions = [newSession, ...sessions.filter((s) => s.date !== today)].slice(0, 30)
 
   await Promise.all([
     saveVocab(sub, finalVocab),
@@ -127,6 +136,6 @@ export async function POST(req: Request) {
     boxMoves,
     newWords: extracted.new_vocab,
     nextDueText: minInterval <= 1 ? "morgen" : `in ${minInterval} Tagen`,
-    newTerms: body.newTerms,
+    streak: calcStreak(updatedSessions, today),
   })
 }

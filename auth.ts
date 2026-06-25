@@ -7,7 +7,12 @@ const ALLOWED = (process.env.ALLOWED_EMAILS ?? "")
   .filter(Boolean)
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [Google],
+  providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+  ],
   callbacks: {
     signIn({ user }) {
       const email = (user.email ?? "").toLowerCase()

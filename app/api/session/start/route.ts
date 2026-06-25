@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import { seedIfEmpty, getVocab, getProgress } from "@/lib/kv"
+import { seedIfEmpty, getVocab, getProgress, getSessions, calcStreak } from "@/lib/kv"
 import { buildQueue, assignDirections } from "@/lib/srs"
 import { ratelimit } from "@/lib/ratelimit"
 
@@ -15,10 +15,15 @@ export async function POST() {
   await seedIfEmpty(sub)
 
   const today = new Date().toISOString().split("T")[0]
-  const [vocab, progress] = await Promise.all([getVocab(sub), getProgress(sub)])
+  const [vocab, progress, sessions] = await Promise.all([
+    getVocab(sub),
+    getProgress(sub),
+    getSessions(sub),
+  ])
 
   const queue = buildQueue(vocab, today, 10)
   const vocabWithDir = assignDirections(vocab, queue)
+  const streak = calcStreak(sessions, today)
 
-  return Response.json({ vocab: vocabWithDir, queue, progress, today })
+  return Response.json({ vocab: vocabWithDir, queue, progress, today, streak })
 }

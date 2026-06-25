@@ -1,9 +1,28 @@
-import { splitTutor } from "@/lib/tutor-utils"
+import { Fragment } from "react"
 
 type Props = {
   role: "tutor" | "me"
   text: string
   isTyping?: boolean
+}
+
+// Render **bold** spans and preserve paragraph breaks. Dependency-free so it
+// stays client-safe and handles streamed (possibly half-finished) markdown.
+function renderRich(text: string) {
+  return text.split("\n").map((line, li, lines) => (
+    <Fragment key={li}>
+      {line.split("**").map((part, i) =>
+        i % 2 === 1 ? (
+          <strong key={i} className="font-extrabold text-text-bright">
+            {part}
+          </strong>
+        ) : (
+          <Fragment key={i}>{part}</Fragment>
+        )
+      )}
+      {li < lines.length - 1 && <br />}
+    </Fragment>
+  ))
 }
 
 export default function ChatBubble({ role, text, isTyping }: Props) {
@@ -29,14 +48,9 @@ export default function ChatBubble({ role, text, isTyping }: Props) {
     )
   }
 
-  const { explain, action } = splitTutor(text)
-
   return (
-    <div className="self-start max-w-[84%] bg-surface border border-border-bubble rounded-bubble rounded-bl-[8px] px-4 py-[14px] text-[15px] leading-relaxed text-text-body">
-      {explain && <p>{explain}</p>}
-      {action && (
-        <p className="mt-3 font-extrabold text-text-bright">{action}</p>
-      )}
+    <div className="self-start max-w-[84%] bg-surface border border-border-bubble rounded-bubble rounded-bl-[8px] px-4 py-[14px] text-[15px] leading-relaxed text-text-body whitespace-pre-wrap">
+      {renderRich(text)}
     </div>
   )
 }
