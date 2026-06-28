@@ -13,7 +13,7 @@ export async function streamChat(
   messages: ChatMessage[],
   progress: Progress,
   today: string,
-  opts?: { mode?: Mode; lastSession?: SessionLog | null }
+  opts?: { mode?: Mode; lastSession?: SessionLog | null; knownWords?: string[] }
 ): Promise<ReadableStream<Uint8Array>> {
   const system = buildSystemMessages(progress, today, opts)
 
