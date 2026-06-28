@@ -5,9 +5,9 @@ import { ratelimit } from "@/lib/ratelimit"
 import { z } from "zod"
 
 const BodySchema = z.object({
-  messages: z.array(
-    z.object({ role: z.enum(["user", "assistant"]), content: z.string() })
-  ),
+  messages: z
+    .array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().max(8000) }))
+    .max(100),
   mode: z.enum(["new", "free"]).default("new"),
 })
 
