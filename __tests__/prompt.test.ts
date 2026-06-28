@@ -74,6 +74,16 @@ test("free mode degrades to known grammar when the deck is empty", () => {
   expect(free).toContain("sein-Endungen") // from grammar_covered fallback
 })
 
+test("free mode tolerates a malformed last session (missing covered/missed)", () => {
+  // Redis data is not runtime-validated; a legacy/partial session must not crash.
+  const blocks = buildSystemMessages(progress(), "2026-06-25", {
+    mode: "free",
+    lastSession: { date: "2026-06-24", queued_next: "x" } as unknown as SessionLog,
+    knownWords: ["ben"],
+  })
+  expect(blocks[2].text).toContain("Freies Lernen")
+})
+
 test("the cached prefix (block 1) is unchanged across modes", () => {
   const base = buildSystemMessages(progress(), "2026-06-25")
   const free = buildSystemMessages(progress(), "2026-06-25", { mode: "free", lastSession: null })

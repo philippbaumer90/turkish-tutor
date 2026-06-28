@@ -70,21 +70,17 @@ export function buildSystemMessages(
     })
   } else if (opts?.mode === "free") {
     const s = opts.lastSession
+    // Optional chaining: Redis session data is not runtime-validated, so a
+    // legacy/partial entry missing covered/missed must degrade, not crash.
     const anchor = s
-      ? ` (zuletzt behandelt: ${s.covered.join(", ") || "—"}; offen geblieben: ${s.missed.join(", ") || "—"})`
+      ? ` (zuletzt behandelt: ${s.covered?.join(", ") || "—"}; offen geblieben: ${s.missed?.join(", ") || "—"})`
       : ""
     const known = opts.knownWords ?? []
-    if (known.length > 0) {
-      blocks.push({
-        type: "text",
-        text: `AKTUELLER MODUS — Freies Lernen (Bekanntes festigen): Verwende AUSSCHLIESSLICH die unten aufgeführten, dem Lernenden bereits bekannten Wörter und kombiniere sie zu neuen, einfachen Sätzen und Fragen. Führe KEINE neuen Vokabeln ein — wenn der Lernende selbst nach einem Wort fragt, erkläre es kurz, aber bring von dir aus keinen neuen Stoff. Knüpf locker an die letzte Übung an${anchor}. Lass den Lernenden produzieren und korrigiere freundlich mit Grund.\nBekannte Wörter: ${known.join(", ")}.`,
-      })
-    } else {
-      blocks.push({
-        type: "text",
-        text: `AKTUELLER MODUS — Freies Lernen: Kein Pflichtpensum. Festige Bekanntes und kombiniere die wenigen bekannten Elemente zu einfachen Sätzen; führe höchstens sehr sparsam Neues ein. Bekannt: ${progress.grammar_covered.join("; ") || progress.phase_pointer}.${anchor}`,
-      })
-    }
+    const text =
+      known.length > 0
+        ? `AKTUELLER MODUS — Freies Lernen (Bekanntes festigen): Verwende AUSSCHLIESSLICH die unten aufgeführten, dem Lernenden bereits bekannten Wörter und kombiniere sie zu neuen, einfachen Sätzen und Fragen. Führe KEINE neuen Vokabeln ein — wenn der Lernende selbst nach einem Wort fragt, erkläre es kurz, aber bring von dir aus keinen neuen Stoff. Knüpf locker an die letzte Übung an${anchor}. Lass den Lernenden produzieren und korrigiere freundlich mit Grund.\nBekannte Wörter: ${known.join(", ")}.`
+        : `AKTUELLER MODUS — Freies Lernen: Kein Pflichtpensum. Festige Bekanntes und kombiniere die wenigen bekannten Elemente zu einfachen Sätzen; führe höchstens sehr sparsam Neues ein. Bekannt: ${progress.grammar_covered.join("; ") || progress.phase_pointer}.${anchor}`
+    blocks.push({ type: "text", text })
   }
 
   return blocks
