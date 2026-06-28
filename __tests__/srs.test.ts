@@ -124,10 +124,16 @@ describe("gradeAnswer multi-gloss", () => {
     expect(gradeAnswer("evet", senin)).toBe(false)
   })
 
-  it("splits on commas too", () => {
+  it("does not split on bare commas (a comma gloss is one phrase)", () => {
     const c = card({ tr: "x", de: "Hallo, Guten Tag", accept: [], dir: "tr2de" })
-    expect(gradeAnswer("hallo", c)).toBe(true)
-    expect(gradeAnswer("guten tag", c)).toBe(true)
+    expect(gradeAnswer("hallo", c)).toBe(false)
+    expect(gradeAnswer("Hallo, Guten Tag", c)).toBe(true)
+  })
+
+  it("does not split the Turkish target on de2tr (canonical answer is exact)", () => {
+    const c = card({ tr: "merhaba, nasılsın", de: "hallo, wie geht's", dir: "de2tr" })
+    expect(gradeAnswer("merhaba", c)).toBe(false)
+    expect(gradeAnswer("merhaba, nasılsın", c)).toBe(true)
   })
 })
 
