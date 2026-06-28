@@ -4,7 +4,7 @@ import { INTERVALS, normalize } from "@/lib/srs"
 import { coerceTopic } from "@/lib/topics"
 import { extractSessionData } from "@/lib/claude"
 import { mergeGrammarCovered } from "@/lib/session-extract"
-import { ratelimit } from "@/lib/ratelimit"
+import { extractRatelimit } from "@/lib/ratelimit"
 import { z } from "zod"
 
 // Background path: the Claude extraction (new vocab, curriculum pointer, weak
@@ -24,9 +24,10 @@ export async function POST(req: Request) {
 
   const sub = session.user.email
 
-  // /extract calls Claude (a 1024-token tool call); rate-limit it like /chat and
-  // /start so it can't be hammered into a runaway Anthropic bill.
-  const { success } = await ratelimit.limit(sub)
+  // /extract calls Claude (a 1024-token tool call); rate-limit it on its OWN
+  // bucket so chat traffic can't exhaust the limit and 429 this once-per-session
+  // persist call, while still capping runaway Anthropic cost.
+  const { success } = await extractRatelimit.limit(sub)
   if (!success) return Response.json({ error: "Zu viele Anfragen." }, { status: 429 })
 
   let body: z.infer<typeof BodySchema>
@@ -77,7 +78,8 @@ export async function POST(req: Request) {
       topic: coerceTopic(v.topic),
       phase: progress.phase, // the word's "lesson" = the phase active when introduced
       pos: v.pos,
-      example: v.example,
+      // Only keep a complete example pair; a partial one (schema-legal) isn't displayable.
+      example: v.example?.tr && v.example?.de ? { tr: v.example.tr, de: v.example.de } : undefined,
       synonyms: v.synonyms,
       antonyms: v.antonyms,
     }))

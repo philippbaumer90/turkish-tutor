@@ -14,7 +14,9 @@ export const SessionExtractSchema = z.object({
       notes: z.string().optional(),
       topic: z.string().optional(),
       pos: z.string().optional(),
-      example: z.object({ tr: z.string(), de: z.string() }).optional(),
+      // Sub-fields optional to match the tool schema (which marks neither
+      // required) — a partial example must not fail the whole payload.
+      example: z.object({ tr: z.string().optional(), de: z.string().optional() }).optional(),
       synonyms: z.array(z.string()).optional(),
       antonyms: z.array(z.string()).optional(),
     })
