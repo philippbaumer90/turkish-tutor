@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import { getProgress, getSessions, getVocab } from "@/lib/kv"
+import { getProgress, getSessions, getVocab, type SessionLog } from "@/lib/kv"
 import { streamChat } from "@/lib/claude"
 import { ratelimit } from "@/lib/ratelimit"
 import { z } from "zod"
@@ -32,13 +32,15 @@ export async function POST(req: Request) {
   // Free mode recombines what the learner already knows, so it needs both the
   // last-session anchor and the actual deck (the known-word inventory). Sessions
   // are stored newest-first (session/end prepends), so .at(0) is the most recent.
-  let lastSession = null
+  let lastSession: SessionLog | null = null
   let knownWords: string[] = []
   if (body.mode === "free") {
     const [sessions, vocab] = await Promise.all([getSessions(sub), getVocab(sub)])
     lastSession = sessions.at(0) ?? null
-    // Bound the list so a large deck can't blow up the prompt.
-    knownWords = Array.from(new Set(vocab.map((c) => c.tr))).slice(0, 120)
+    // Bound the list so a large deck can't blow up the prompt. Keep the MOST
+    // RECENT words (deck is oldest-first, new words appended) — those are the
+    // ones most worth reinforcing in free practice.
+    knownWords = Array.from(new Set(vocab.map((c) => c.tr))).slice(-120)
   }
 
   let stream: ReadableStream<Uint8Array>
