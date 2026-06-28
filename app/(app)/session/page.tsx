@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import ProgressBar from "@/components/ProgressBar"
 import ChatBubble from "@/components/ChatBubble"
@@ -88,6 +88,7 @@ function SessionView() {
   const [streak, setStreak] = useState(0)
 
   const scrollRef = useRef<HTMLDivElement>(null)
+  const chatInputRef = useRef<HTMLTextAreaElement>(null)
   const touchStartX = useRef(0)
 
   useEffect(() => {
@@ -120,6 +121,17 @@ function SessionView() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [chat, pending])
+
+  // Auto-grow the chat textarea with its content (and shrink back after sending,
+  // when chatInput is cleared). Capped via max-height in the className.
+  // useLayoutEffect: measure-then-mutate before paint, so a wrap never flashes
+  // at the old height.
+  useLayoutEffect(() => {
+    const el = chatInputRef.current
+    if (!el) return
+    el.style.height = "auto"
+    el.style.height = `${el.scrollHeight}px`
+  }, [chatInput])
 
   function curCard(): CardWithDir | null {
     if (!queue?.length) return null
@@ -578,16 +590,25 @@ function SessionView() {
 
       {/* Input dock */}
       <div className="px-[14px] pt-2 pb-4 bg-bg shrink-0">
-        <div className="flex items-center gap-2.5">
-          <input
+        <div className="flex items-end gap-2.5">
+          <textarea
+            ref={chatInputRef}
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); sendChat() } }}
+            onKeyDown={(e) => {
+              // Enter inserts a newline (textarea default). Send via the → button
+              // or ⌘/Ctrl+Enter, so a stray Return on mobile never fires a message.
+              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault()
+                sendChat()
+              }
+            }}
+            rows={1}
             placeholder="Auf Türkisch antworten…"
             autoComplete="off"
             autoCapitalize="off"
             spellCheck={false}
-            className="flex-1 h-[52px] rounded-input bg-surface text-text px-5 text-[16px] font-medium outline-none"
+            className="flex-1 min-h-[52px] max-h-32 resize-none rounded-input bg-surface text-text px-5 py-[14px] text-[16px] font-medium outline-none leading-snug"
             style={{ border: "1.5px solid #3f3429", fontSize: "16px" }}
           />
           <button

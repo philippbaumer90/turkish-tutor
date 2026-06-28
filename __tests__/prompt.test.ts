@@ -29,29 +29,59 @@ test("no mode block when opts is omitted", () => {
   expect(blocks.some((b) => b.text.includes(MODE_MARKER))).toBe(false)
 })
 
-test("new mode appends the new-material block", () => {
+test("new mode appends the new-material block with a vocab budget", () => {
   const blocks = buildSystemMessages(progress(), "2026-06-25", { mode: "new" })
   expect(blocks).toHaveLength(3)
   expect(blocks[2].text).toContain("Neue Wörter & Grammatik")
+  // the "~5–8 Einheiten" budget moved out of the always-on prefix into new mode
+  expect(blocks[2].text).toContain("5–8")
 })
 
-test("free mode appends the free block anchored on the last session", () => {
+test("the cached prefix no longer mandates introducing new vocab", () => {
+  // The binding "Neue Vokabeln immer einführen" + "~5–8 Einheiten" rules used to
+  // live in STABLE_SYSTEM and overrode free mode. Moving them into the new-mode
+  // block lets free mode actually forbid new vocab.
+  const stable = buildSystemMessages(progress(), "2026-06-25")[0].text
+  expect(stable).not.toContain("Neue Vokabeln immer")
+  expect(stable).not.toContain("5–8")
+})
+
+test("free mode lists the deck's known words and hard-forbids new vocab", () => {
   const blocks = buildSystemMessages(progress(), "2026-06-25", {
     mode: "free",
     lastSession: lastSession(),
+    knownWords: ["ben", "yorgun", "aç", "ev", "su"],
   })
   expect(blocks).toHaveLength(3)
-  expect(blocks[2].text).toContain("Freies Lernen")
-  expect(blocks[2].text).toContain("ben, yorgun") // covered words
+  const free = blocks[2].text
+  expect(free).toContain("Freies Lernen")
+  // the actual known-word inventory reaches the model (not just coverage prose)
+  expect(free).toContain("ben")
+  expect(free).toContain("su")
+  // a HARD, ungated constraint — not a "WENN wenig vorliegt" fallback
+  expect(free).toContain("AUSSCHLIESSLICH")
+  expect(free).toMatch(/KEINE neuen/i)
 })
 
-test("free mode degrades to grammar_covered when there is no last session", () => {
+test("free mode degrades to known grammar when the deck is empty", () => {
   const blocks = buildSystemMessages(progress(), "2026-06-25", {
     mode: "free",
     lastSession: null,
+    knownWords: [],
   })
-  expect(blocks[2].text).toContain("sein-Endungen")
-  expect(blocks[2].text).toContain("kombiniere die wenigen bekannten Wörter")
+  const free = blocks[2].text
+  expect(free).toContain("Freies Lernen")
+  expect(free).toContain("sein-Endungen") // from grammar_covered fallback
+})
+
+test("free mode tolerates a malformed last session (missing covered/missed)", () => {
+  // Redis data is not runtime-validated; a legacy/partial session must not crash.
+  const blocks = buildSystemMessages(progress(), "2026-06-25", {
+    mode: "free",
+    lastSession: { date: "2026-06-24", queued_next: "x" } as unknown as SessionLog,
+    knownWords: ["ben"],
+  })
+  expect(blocks[2].text).toContain("Freies Lernen")
 })
 
 test("the cached prefix (block 1) is unchanged across modes", () => {

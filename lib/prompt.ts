@@ -16,20 +16,19 @@ KERNREGELN — ABSOLUT BINDEND:
    - „Die Vokalharmonie entscheidet den Vokal jeder Endung: hinten (a/ı/o/u) → -a/-ı, vorne (e/i/ö/ü) → -e/-i."
 (4) Korrigiere Fehler freundlich und kurz — nenne den Grund auf Deutsch.
 (5) Stelle zum Schluss GENAU EINE kurze Anschlussfrage, um den Lernenden zur Produktion anzuregen.
-(6) Neue Vokabeln immer mit ihrer Bedeutung und einem Beispielsatz einführen.
+(6) Wenn du ein neues Wort einführst, gib immer Bedeutung und einen kurzen Beispielsatz dazu.
 (7) Vokalharmonie in jedem türkischen Beispiel beachten und bei Gelegenheit benennen.
 
 PÄDAGOGISCHE REGELN:
 - Lernender ist deutscher Muttersprachler — nutze diesen Vorteil für Kontrasterklärungen.
-- Kleine Mengen neuer Stoff (~5–8 Einheiten), damit Produktion möglich bleibt.
-- Altes und Neues mischen — nie nur ein einziges Thema.
+- Wie viel neuer Stoff eingeführt wird, richtet sich nach dem aktuellen Modus.
 - Schwache Punkte wiederholt ansprechen (Endungen bei hinteren Vokalen, Fragepartikel, sen vs. senin).
 - Fehler immer mit dem Grund korrigieren, nicht nur „falsch".`
 
 export function buildSystemMessages(
   progress: Progress,
   today: string,
-  opts?: { mode?: Mode; lastSession?: SessionLog | null }
+  opts?: { mode?: Mode; lastSession?: SessionLog | null; knownWords?: string[] }
 ): Array<{
   type: "text"
   text: string
@@ -67,18 +66,21 @@ export function buildSystemMessages(
   if (opts?.mode === "new") {
     blocks.push({
       type: "text",
-      text: `AKTUELLER MODUS — Neue Wörter & Grammatik: Führe den nächsten Lehrplanschritt (${progress.phase_pointer}) ein und mische bewusst Vokabular/Grammatik aus voriger + aktueller Lektion. ~5–8 neue Einheiten, alt+neu mischen.`,
+      text: `AKTUELLER MODUS — Neue Wörter & Grammatik: Führe den nächsten Lehrplanschritt (${progress.phase_pointer}) ein und mische bewusst Vokabular/Grammatik aus voriger + aktueller Lektion. Kleine Mengen neuer Stoff (~5–8 Einheiten), damit Produktion möglich bleibt; alt und neu mischen, nie nur ein einziges Thema.`,
     })
   } else if (opts?.mode === "free") {
     const s = opts.lastSession
-    const known =
-      s?.covered?.join(", ") ||
-      progress.grammar_covered?.join(", ") ||
-      progress.phase_pointer
-    blocks.push({
-      type: "text",
-      text: `AKTUELLER MODUS — Freies Lernen: Kein Pflichtpensum. Knüpf an die letzte Übung an — behandelt: ${known}; offen geblieben: ${s?.missed?.join(", ") || "—"}; geplant war: ${s?.queued_next || progress.next_up}. Lockeres Gespräch/Übung auf Türkisch, Bekanntes festigen, freundlich korrigieren. Neue Wörter nur sparsam. WENN nur sehr wenig Bekanntes vorliegt (Anfänger, kaum Verlauf): kombiniere die wenigen bekannten Wörter zu neuen, einfachen Sätzen statt viel Neues einzuführen.`,
-    })
+    // Optional chaining: Redis session data is not runtime-validated, so a
+    // legacy/partial entry missing covered/missed must degrade, not crash.
+    const anchor = s
+      ? ` (zuletzt behandelt: ${s.covered?.join(", ") || "—"}; offen geblieben: ${s.missed?.join(", ") || "—"})`
+      : ""
+    const known = opts.knownWords ?? []
+    const text =
+      known.length > 0
+        ? `AKTUELLER MODUS — Freies Lernen (Bekanntes festigen): Verwende AUSSCHLIESSLICH die unten aufgeführten, dem Lernenden bereits bekannten Wörter und kombiniere sie zu neuen, einfachen Sätzen und Fragen. Führe KEINE neuen Vokabeln ein — wenn der Lernende selbst nach einem Wort fragt, erkläre es kurz, aber bring von dir aus keinen neuen Stoff. Knüpf locker an die letzte Übung an${anchor}. Lass den Lernenden produzieren und korrigiere freundlich mit Grund.\nBekannte Wörter: ${known.join(", ")}.`
+        : `AKTUELLER MODUS — Freies Lernen: Kein Pflichtpensum. Festige Bekanntes und kombiniere die wenigen bekannten Elemente zu einfachen Sätzen; führe höchstens sehr sparsam Neues ein. Bekannt: ${progress.grammar_covered.join("; ") || progress.phase_pointer}.${anchor}`
+    blocks.push({ type: "text", text })
   }
 
   return blocks

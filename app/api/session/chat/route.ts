@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import { getProgress, getSessions } from "@/lib/kv"
+import { getProgress, getSessions, getVocab, type SessionLog } from "@/lib/kv"
 import { streamChat } from "@/lib/claude"
 import { ratelimit } from "@/lib/ratelimit"
 import { z } from "zod"
@@ -29,14 +29,23 @@ export async function POST(req: Request) {
 
   const today = new Date().toISOString().split("T")[0]
   const progress = await getProgress(sub)
-  // Sessions are stored newest-first (session/end prepends), so .at(0) is the
-  // most recent — the Free-mode anchor. .at(-1) would pin to the stalest one.
-  const lastSession =
-    body.mode === "free" ? ((await getSessions(sub)).at(0) ?? null) : null
+  // Free mode recombines what the learner already knows, so it needs both the
+  // last-session anchor and the actual deck (the known-word inventory). Sessions
+  // are stored newest-first (session/end prepends), so .at(0) is the most recent.
+  let lastSession: SessionLog | null = null
+  let knownWords: string[] = []
+  if (body.mode === "free") {
+    const [sessions, vocab] = await Promise.all([getSessions(sub), getVocab(sub)])
+    lastSession = sessions.at(0) ?? null
+    // Bound the list so a large deck can't blow up the prompt. Keep the MOST
+    // RECENT words (deck is oldest-first, new words appended) — those are the
+    // ones most worth reinforcing in free practice.
+    knownWords = Array.from(new Set(vocab.map((c) => c.tr))).slice(-120)
+  }
 
   let stream: ReadableStream<Uint8Array>
   try {
-    stream = await streamChat(body.messages, progress, today, { mode: body.mode, lastSession })
+    stream = await streamChat(body.messages, progress, today, { mode: body.mode, lastSession, knownWords })
   } catch (err) {
     console.error("Claude stream error:", err)
     return Response.json({ error: "Tutor antwortet gerade nicht." }, { status: 502 })
