@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import ProgressBar from "@/components/ProgressBar"
 import ChatBubble from "@/components/ChatBubble"
@@ -124,7 +124,9 @@ function SessionView() {
 
   // Auto-grow the chat textarea with its content (and shrink back after sending,
   // when chatInput is cleared). Capped via max-height in the className.
-  useEffect(() => {
+  // useLayoutEffect: measure-then-mutate before paint, so a wrap never flashes
+  // at the old height.
+  useLayoutEffect(() => {
     const el = chatInputRef.current
     if (!el) return
     el.style.height = "auto"
