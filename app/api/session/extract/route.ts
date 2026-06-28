@@ -3,6 +3,8 @@ import { getVocab, getProgress, getSessions, saveVocab, saveProgress, saveSessio
 import { INTERVALS, normalize } from "@/lib/srs"
 import { coerceTopic } from "@/lib/topics"
 import { extractSessionData } from "@/lib/claude"
+import { mergeGrammarCovered } from "@/lib/session-extract"
+import { extractRatelimit } from "@/lib/ratelimit"
 import { z } from "zod"
 
 // Background path: the Claude extraction (new vocab, curriculum pointer, weak
@@ -12,8 +14,8 @@ import { z } from "zod"
 const BodySchema = z.object({
   transcript: z.array(z.object({
     role: z.enum(["user", "assistant"]),
-    content: z.string(),
-  })),
+    content: z.string().max(8000),
+  })).max(100),
 })
 
 export async function POST(req: Request) {
@@ -21,6 +23,12 @@ export async function POST(req: Request) {
   if (!session?.user?.email) return Response.json({ error: "Unauthorized" }, { status: 401 })
 
   const sub = session.user.email
+
+  // /extract calls Claude (a 1024-token tool call); rate-limit it on its OWN
+  // bucket so chat traffic can't exhaust the limit and 429 this once-per-session
+  // persist call, while still capping runaway Anthropic cost.
+  const { success } = await extractRatelimit.limit(sub)
+  if (!success) return Response.json({ error: "Zu viele Anfragen." }, { status: 429 })
 
   let body: z.infer<typeof BodySchema>
   try {
@@ -70,7 +78,8 @@ export async function POST(req: Request) {
       topic: coerceTopic(v.topic),
       phase: progress.phase, // the word's "lesson" = the phase active when introduced
       pos: v.pos,
-      example: v.example,
+      // Only keep a complete example pair; a partial one (schema-legal) isn't displayable.
+      example: v.example?.tr && v.example?.de ? { tr: v.example.tr, de: v.example.de } : undefined,
       synonyms: v.synonyms,
       antonyms: v.antonyms,
     }))
@@ -80,7 +89,7 @@ export async function POST(req: Request) {
     ...progress,
     ...extracted.pointer_update,
     vocab_count: finalVocab.length,
-    grammar_covered: extracted.grammar_covered,
+    grammar_covered: mergeGrammarCovered(progress.grammar_covered, extracted.grammar_covered),
     weak_spots: extracted.weak_spots,
     history: [
       ...progress.history,

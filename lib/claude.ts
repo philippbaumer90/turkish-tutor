@@ -4,6 +4,10 @@ import { buildSystemMessages } from "./prompt"
 import type { Mode } from "./prompt"
 import type { Progress, SessionLog } from "./kv"
 import { TOPICS } from "./topics"
+import { coerceSessionExtract } from "./session-extract"
+import type { SessionExtract } from "./session-extract"
+
+export type { SessionExtract }
 
 const client = new Anthropic()
 
@@ -41,28 +45,6 @@ export async function streamChat(
       }
     },
   })
-}
-
-export type SessionExtract = {
-  new_vocab: {
-    tr: string
-    de: string
-    notes?: string
-    topic?: string
-    pos?: string
-    example?: { tr: string; de: string }
-    synonyms?: string[]
-    antonyms?: string[]
-  }[]
-  pointer_update: { phase: number; phase_pointer: string; next_up: string }
-  weak_spots: string[]
-  grammar_covered: string[]
-  session_log: {
-    covered: string[]
-    missed: string[]
-    queued_next: string
-    notes?: string
-  }
 }
 
 export async function extractSessionData(
@@ -169,21 +151,12 @@ export async function extractSessionData(
     ],
   })
 
+  // Validate untrusted tool output before it leaves this function — it gets
+  // persisted and fed back into the next prompt. Malformed → no-op default.
   const toolUse = response.content.find((b) => b.type === "tool_use")
-  if (!toolUse || toolUse.type !== "tool_use") {
-    return {
-      new_vocab: [],
-      pointer_update: {
-        phase: progress.phase,
-        phase_pointer: progress.phase_pointer,
-        next_up: progress.next_up,
-      },
-      weak_spots: progress.weak_spots,
-      grammar_covered: progress.grammar_covered,
-      session_log: { covered: [], missed: [], queued_next: "" },
-    }
-  }
-
-  return toolUse.input as SessionExtract
+  return coerceSessionExtract(
+    toolUse?.type === "tool_use" ? toolUse.input : undefined,
+    progress
+  )
 }
 
