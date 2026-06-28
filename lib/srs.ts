@@ -49,10 +49,23 @@ export function normalize(s: string): string {
     .normalize("NFC")
 }
 
+// A stored gloss can pack several meanings plus an annotation into one string,
+// e.g. "dein / du (Besitzpronomen)". Expand it into the individual acceptable
+// answers — drop parenthetical annotations, split on / , ; or " oder " — so a
+// single correct meaning counts as correct without hand-maintaining accept[].
+function expandGlosses(raw: string): string[] {
+  const stripped = raw.replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim()
+  const alts = stripped
+    .split(/\s*[/,;]\s*|\s+oder\s+/)
+    .map((a) => a.trim())
+    .filter(Boolean)
+  return [raw.trim(), stripped, ...alts].filter(Boolean)
+}
+
 export function validAnswers(card: CardWithDir): string[] {
-  return card.dir === "de2tr"
-    ? [card.tr]
-    : [card.de, ...(card.accept ?? [])]
+  const raw =
+    card.dir === "de2tr" ? [card.tr] : [card.de, ...(card.accept ?? [])]
+  return raw.flatMap(expandGlosses)
 }
 
 export function gradeAnswer(answer: string, card: CardWithDir): boolean {
