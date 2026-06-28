@@ -33,6 +33,18 @@ describe("coerceSessionExtract", () => {
     expect(r.session_log.queued_next).toBe("Z")
   })
 
+  it("tolerates a partial example object (the tool schema permits it)", () => {
+    // The save_session tool schema declares example.tr/de WITHOUT a required
+    // array, so the model may return example: { tr } or {}. That must not fail
+    // the whole payload and discard the session's vocab + pointer.
+    const r = coerceSessionExtract(
+      { ...valid, new_vocab: [{ tr: "ev", de: "Haus", example: { tr: "evde" } }] },
+      progress()
+    )
+    expect(r.new_vocab).toHaveLength(1)
+    expect(r.new_vocab[0].example?.tr).toBe("evde")
+  })
+
   it("returns a safe default built from progress on malformed input", () => {
     const r = coerceSessionExtract({ garbage: true }, progress())
     expect(r.new_vocab).toEqual([])
