@@ -49,23 +49,27 @@ export function normalize(s: string): string {
     .normalize("NFC")
 }
 
-// A stored gloss can pack several meanings plus an annotation into one string,
+// A German gloss can pack several meanings plus an annotation into one string,
 // e.g. "dein / du (Besitzpronomen)". Expand it into the individual acceptable
-// answers — drop parenthetical annotations, split on / , ; or " oder " — so a
+// answers — drop parenthetical annotations, split on "/", ";" or " oder " — so a
 // single correct meaning counts as correct without hand-maintaining accept[].
+// Comma is deliberately NOT a separator: it appears inside one-phrase glosses
+// ("Hallo, guten Tag") far more often than as an alternation.
 function expandGlosses(raw: string): string[] {
   const stripped = raw.replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim()
   const alts = stripped
-    .split(/\s*[/,;]\s*|\s+oder\s+/)
+    .split(/\s*[/;]\s*|\s+oder\s+/)
     .map((a) => a.trim())
     .filter(Boolean)
   return [raw.trim(), stripped, ...alts].filter(Boolean)
 }
 
 export function validAnswers(card: CardWithDir): string[] {
-  const raw =
-    card.dir === "de2tr" ? [card.tr] : [card.de, ...(card.accept ?? [])]
-  return raw.flatMap(expandGlosses)
+  // de2tr: the Turkish word is the single canonical answer — keep it exact, never
+  // split it. Only the German gloss side (tr2de) carries multiple meanings.
+  if (card.dir === "de2tr") return [card.tr]
+  const expanded = [card.de, ...(card.accept ?? [])].flatMap(expandGlosses)
+  return Array.from(new Set(expanded))
 }
 
 export function gradeAnswer(answer: string, card: CardWithDir): boolean {
