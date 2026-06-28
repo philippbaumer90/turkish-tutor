@@ -93,6 +93,44 @@ describe("gradeAnswer", () => {
   })
 })
 
+// gradeAnswer() — multi-gloss cards where `de` crams several meanings + an
+// annotation into one string (e.g. "dein / du (Besitzpronomen)") and accept[]
+// was never populated. A single correct meaning must count as correct.
+describe("gradeAnswer multi-gloss", () => {
+  const senin = card({
+    tr: "senin",
+    de: "dein / du (Besitzpronomen)",
+    accept: [],
+    dir: "tr2de",
+  })
+
+  it("accepts the first slash-separated meaning alone", () => {
+    expect(gradeAnswer("dein", senin)).toBe(true)
+  })
+
+  it("accepts the second slash-separated meaning alone", () => {
+    expect(gradeAnswer("du", senin)).toBe(true)
+  })
+
+  it("accepts the full stored gloss string", () => {
+    expect(gradeAnswer("dein / du (Besitzpronomen)", senin)).toBe(true)
+  })
+
+  it("does not accept the parenthetical annotation as an answer", () => {
+    expect(gradeAnswer("Besitzpronomen", senin)).toBe(false)
+  })
+
+  it("still rejects a genuinely wrong answer", () => {
+    expect(gradeAnswer("evet", senin)).toBe(false)
+  })
+
+  it("splits on commas too", () => {
+    const c = card({ tr: "x", de: "Hallo, Guten Tag", accept: [], dir: "tr2de" })
+    expect(gradeAnswer("hallo", c)).toBe(true)
+    expect(gradeAnswer("guten tag", c)).toBe(true)
+  })
+})
+
 // isDue()
 describe("isDue", () => {
   it("is due when last_reviewed + interval_days = today (boundary inclusive)", () => {
